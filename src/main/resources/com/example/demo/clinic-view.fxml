@@ -25,7 +25,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.ClinicManagerController">
    <center>
       <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
@@ -79,7 +79,7 @@
                                  </children>
                               </HBox>
                               <Button id="bt_loadProviders" fx:id="bt_loadProviders" mnemonicParsing="false" text="Load Providers" translateY="-18.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                              <Button id="bt_clear" fx:id="bt_clearSelection" mnemonicParsing="false" prefWidth="100.0" text="Clear" translateY="-18.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                              <Button id="bt_clear" fx:id="bt_clearSelection" mnemonicParsing="false" onAction="#clearSelection" prefWidth="100.0" text="Clear" translateY="-18.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
                            </children>
                         </GridPane>
                      </children>
