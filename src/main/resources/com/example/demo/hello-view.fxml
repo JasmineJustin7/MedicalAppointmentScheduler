@@ -14,6 +14,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -46,7 +47,7 @@
                           </rowConstraints>
                            <children>
                               <Label text="Appointment Date" translateX="25.0" />
-                              <DatePicker id="dp_appointmentDate" fx:id="db_apptDateSC" promptText="date" GridPane.columnIndex="1" />
+                              <DatePicker id="dp_appointmentDate" fx:id="db_apptDateSC" editable="false" promptText="date" GridPane.columnIndex="1" />
                               <Label text="Patient" translateX="50.0" GridPane.rowIndex="1" />
                               <VBox id="vb+" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                  <children>
@@ -63,14 +64,17 @@
                               </HBox>
                               <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                  <children>
-                                    <RadioButton id="rb_officeVisit" mnemonicParsing="false" text="Office Visit" />
-                                    <RadioButton id="rb_imaging" mnemonicParsing="false" text="Imaging Service" translateX="75.0" />
+                                    <RadioButton id="rb_officeVisit" fx:id="rb_officeVisit" mnemonicParsing="false" text="Office Visit">
+                                       <toggleGroup>
+                                          <ToggleGroup fx:id="Appointment" />
+                                       </toggleGroup></RadioButton>
+                                    <RadioButton id="rb_imaging" fx:id="rb_imaging" mnemonicParsing="false" text="Imaging Service" toggleGroup="$Appointment" translateX="75.0" />
                                  </children>
                               </HBox>
                               <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                  <children>
-                                    <ComboBox id="cb_timeslot" prefWidth="100.0" promptText="Timeslot" />
-                                    <ComboBox id="cb_provider" prefWidth="100.0" promptText="Provider" translateX="50.0" />
+                                    <ComboBox id="cb_timeslot" fx:id="cb_timslotSC" prefWidth="100.0" promptText="Timeslot" />
+                                    <ComboBox id="cb_provider" fx:id="cb_providerSC" prefWidth="100.0" promptText="Provider" translateX="50.0" />
                                  </children>
                               </HBox>
                               <Button id="bt_loadProviders" fx:id="bt_loadProviders" mnemonicParsing="false" text="Load Providers" translateY="-18.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
@@ -159,6 +163,6 @@
       </TabPane>
    </center>
    <bottom>
-      <TextArea prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <TextArea fx:id="ta_outputDIsplay" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
    </bottom>
 </BorderPane>
