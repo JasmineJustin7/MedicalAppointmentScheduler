@@ -51,6 +51,8 @@ public class ClinicManagerController {
     private Button bt_cancelAppt;
     /**button used to clear all fields from a given tab*/
     @FXML
+    private Button bt_clearAppt;
+    @FXML
     private Button bt_clearSelection;
     /**button used to load providers from the providers text file onto a combo box or in the text area*/
     @FXML
@@ -64,9 +66,15 @@ public class ClinicManagerController {
     /**combo box that holds all timeslots for rescheduling*/
     @FXML
     private ComboBox<String> cb_timeslotR;
+    /**combo box for new timeslot when rescheduling*/
+    @FXML
+    private ComboBox<?> cb_tSlotR;
     /**combo box that holds all timeslots for scheduling and cancelling*/
     @FXML
     private ComboBox<String> cb_timslotSC;
+    /**date picker for current appt date for rescheduling appointment*/
+    @FXML
+    private DatePicker dp_apptDR;
     /**date picker for scheduling or cancelling appointment date*/
     @FXML
     private DatePicker dp_apptDateSC;
@@ -88,6 +96,8 @@ public class ClinicManagerController {
     private RadioButton rb_officeVisit;
     @FXML
     private TextArea ta_outputDisplay;
+    @FXML
+    private TableView<Location> tableViewClinicLocations;
     @FXML
     private TableColumn<Location, String> tc_city;
     @FXML
@@ -351,6 +361,7 @@ public class ClinicManagerController {
     @FXML
     public void initialize() {
         loadTimeSlots();
+        loadClinicLocations();
     }
 
 
@@ -372,6 +383,21 @@ public class ClinicManagerController {
 
         cb_timslotSC.setItems(timeSlots);
         cb_timeslotR.setItems(timeSlots);
+    }
+
+    private void loadClinicLocations() {
+
+        /**
+         * debug just to make sure anything prints at all
+         for (Location location : locations) {
+         debug(String.format("City: %s, County: %s, Zip: %s", location.name(), location.getCounty(), location.getZip()));
+         }
+         */
+        ObservableList<Location> locations = FXCollections.observableArrayList(Location.values());
+        this.tc_zip.setCellValueFactory(new PropertyValueFactory<Location, String>("zip"));
+        this.tc_city.setCellValueFactory(new PropertyValueFactory<Location, String>("name"));
+        this.tc_county.setCellValueFactory(new PropertyValueFactory<Location, String>("county"));
+        this.tableViewClinicLocations.setItems(locations);
     }
 
 
