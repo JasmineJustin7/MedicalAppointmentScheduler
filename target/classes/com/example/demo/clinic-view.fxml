@@ -109,11 +109,11 @@
                                     <Insets />
                                  </GridPane.margin>
                               </Button>
-                              <DatePicker promptText="Date" translateY="-30.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <DatePicker fx:id="dp_newDR" promptText="Date" translateY="-30.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                               <DatePicker fx:id="dp_apptDR" promptText="Appt. Date" translateX="10.0" GridPane.columnIndex="2" />
                               <ComboBox fx:id="cb_tSlotR" prefWidth="150.0" promptText="Timeslot " translateX="10.0" translateY="30.0" GridPane.columnIndex="2" />
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="New Appointment:" translateX="45.0" translateY="-6.0" GridPane.rowIndex="1" />
-                              <Button id="bt_clearR" fx:id="bt_clearAppt" mnemonicParsing="false" text="Clear" translateX="90.0" translateY="6.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <Button id="bt_clearR" fx:id="bt_clearAppt" mnemonicParsing="false" text="Clear" onAction="#clearSelection" translateX="90.0" translateY="6.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                            </children>
                         </GridPane>
                      </children></AnchorPane>

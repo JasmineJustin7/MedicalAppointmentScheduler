@@ -8,7 +8,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.Menu;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextArea;
@@ -42,7 +41,6 @@ public class ClinicManagerController {
     private ObservableList<String> listOfDoctors = FXCollections.observableArrayList();
     /***/
     private int technicianIndex = 0;
-
     /**group of radio buttons in the schedule/cancel tab*/
     @FXML
     private ToggleGroup Appointment;
@@ -60,6 +58,9 @@ public class ClinicManagerController {
     /**button used to schedule appointments*/
     @FXML
     private Button bt_scheduleAppt;
+    /**button to reschedule appointment*/
+    @FXML
+    private Button bt_rescheduleAppt;
     /**combo box that holds all providers that work */
     @FXML
     private ComboBox<String> cb_providerSC;
@@ -68,10 +69,13 @@ public class ClinicManagerController {
     private ComboBox<String> cb_timeslotR;
     /**combo box for new timeslot when rescheduling*/
     @FXML
-    private ComboBox<?> cb_tSlotR;
+    private ComboBox<String> cb_tSlotR;
     /**combo box that holds all timeslots for scheduling and cancelling*/
     @FXML
     private ComboBox<String> cb_timslotSC;
+    /**date picker for new appointment*/
+    @FXML
+    private DatePicker dp_newDR;
     /**date picker for current appt date for rescheduling appointment*/
     @FXML
     private DatePicker dp_apptDR;
@@ -84,12 +88,6 @@ public class ClinicManagerController {
     /**date picker for inputting date of birth for scheduling/cancelling appointments*/
     @FXML
     private DatePicker dp_dobSC;
-    @FXML
-    private Menu m_appt;
-    @FXML
-    private Menu m_listOfAppts;
-    @FXML
-    private Menu m_statement;
     @FXML
     private RadioButton rb_imaging;
     @FXML
@@ -383,8 +381,10 @@ public class ClinicManagerController {
 
         cb_timslotSC.setItems(timeSlots);
         cb_timeslotR.setItems(timeSlots);
+        cb_tSlotR.setItems(timeSlots);
     }
 
+    //still working//
     private void loadClinicLocations() {
 
         /**
@@ -409,12 +409,18 @@ public class ClinicManagerController {
         dp_apptDateSC.getEditor().clear();
         dp_dobSC.getEditor().clear();
         Appointment.selectToggle(null);
+
         //Clears time selection and Provider
         cb_timslotSC.getSelectionModel().clearSelection();
         cb_providerSC.getSelectionModel().clearSelection();
 
+        //Reschedule tab
+        tf_fnameR.clear();
+        tf_lnameR.clear();
+        cb_timeslotR.getSelectionModel().clearSelection();
+        cb_tSlotR.getSelectionModel().clearSelection();
+        dp_apptDR.getEditor().clear();
+        dp_dobR.getEditor().clear();
+        dp_newDR.getEditor().clear();
     }
-
-
-
 }
