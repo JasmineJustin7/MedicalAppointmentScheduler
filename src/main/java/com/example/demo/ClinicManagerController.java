@@ -295,7 +295,7 @@ public class ClinicManagerController {
         tf_lnameSC.clear();
         dp_apptDateSC.getEditor().clear();
         dp_dobSC.getEditor().clear();
-        //clear radiobutton
+        Appointment.selectToggle(null);
     }
 
 
