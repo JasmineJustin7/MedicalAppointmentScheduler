@@ -11,10 +11,10 @@ import util.Sort;
 
 public class ClinicManager implements Commands {
     private final Scanner scanner;
-    private final List<Appointment> appointmentList = new List();
-    private final List<Imaging> imagingList = new List();
-    private final List<Provider> providers = new List();
-    private final List<Technician> technicians = new List();
+    private final List<Appointment> appointmentList = new List<>();
+    private final List<Imaging> imagingList = new List<>();
+    private final List<Provider> providers = new List<>();
+    private final List<Technician> technicians = new List<>();
     private int technicianIndex = 0;
 
     public ClinicManager() {

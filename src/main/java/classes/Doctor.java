@@ -71,7 +71,7 @@ public class Doctor extends Provider {
      */
     @Override
     public String toString() {
-        return super.toString() + "] [" + this.specialty.toString() + " #" +
-                npl;
+        return super.toString() + " [" + this.specialty.toString() + " #" +
+                npl + "]";
     }
 }

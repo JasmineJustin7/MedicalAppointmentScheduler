@@ -62,7 +62,7 @@ public class Technician extends Provider {
      */
     @Override
     public String toString() {
-        return super.toString() + String.format(" [rate: $%.2f ", (double) ratePerVisit);
+        return super.toString() + String.format(" [rate: $%.2f", (double) ratePerVisit) + "]";
     }
 
     /**
