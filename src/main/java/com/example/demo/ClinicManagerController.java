@@ -20,40 +20,58 @@ import util.Sort;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.PrintStream;
 import java.util.Iterator;
 import java.util.Scanner;
 
+/**this class acts as the Controller in the MVC style of this software, controlling what the user sees, processing data, and processing appointments*/
 public class ClinicManagerController {
 
-    private final Scanner scanner;
-    private final List<Appointment> appointmentList = new List();
-    private final List<Imaging> imagingList = new List();
-    private final List<Provider> providers = new List();
-    private final List<Technician> technicians = new List();
-    private final List<Doctor> doctors = new List();
+    /**list of appointments*/
+    private final List<Appointment> appointmentList = new List<>();
+    /**list of imaging appointments*/
+    private final List<Imaging> imagingList = new List<>();
+    /**list of providers*/
+    private final List<Provider> providers = new List<>();
+    /**list of technicians*/
+    private final List<Technician> technicians = new List<>();
+    /**list of doctors*/
+    private final List<Doctor> doctors = new List<>();
+    /**string rep of doctors to be displayed in the combo box*/
+    private ObservableList<String> listOfDoctors = FXCollections.observableArrayList();
+    /***/
     private int technicianIndex = 0;
 
+    /**group of radio buttons in the schedule/cancel tab*/
     @FXML
     private ToggleGroup Appointment;
+    /**button used to cancel appointments*/
     @FXML
     private Button bt_cancelAppt;
+    /**button used to clear all fields from a given tab*/
     @FXML
     private Button bt_clearSelection;
+    /**button used to load providers from the providers text file onto a combo box or in the text area*/
     @FXML
     private Button bt_loadProviders;
+    /**button used to schedule appointments*/
     @FXML
     private Button bt_scheduleAppt;
+    /**combo box that holds all providers that work */
     @FXML
     private ComboBox<String> cb_providerSC;
+    /**combo box that holds all timeslots for rescheduling*/
     @FXML
     private ComboBox<?> cb_timeslotR;
+    /**combo box that holds all timeslots for scheduling and cancelling*/
     @FXML
     private ComboBox<?> cb_timslotSC;
+    /**date picker for scheduling or cancelling appointment date*/
     @FXML
     private DatePicker dp_apptDateSC;
+    /**date picker for inputting date of birth for rescheduling appointment*/
     @FXML
     private DatePicker dp_dobR;
+    /**date picker for inputting date of birth for scheduling/cancelling appointments*/
     @FXML
     private DatePicker dp_dobSC;
     @FXML
@@ -83,12 +101,15 @@ public class ClinicManagerController {
     @FXML
     private TextField tf_lnameSC;
 
+    /**default constructor of clinic manager controller*/
+    public ClinicManagerController() {
+        this.loadProviders();
+    }
 
     /**When load providers button is clicked, display doctors in combo box
      * and display technicians in text area*/
     @FXML
     public void displayProvidersInGUI(ActionEvent event){
-        ObservableList<String> listOfDoctors = FXCollections.observableArrayList();
         Iterator<Doctor> var1 = this.doctors.iterator();
         while(var1.hasNext()){ //add doctor to observable list
             Doctor doctor = var1.next();
@@ -103,8 +124,7 @@ public class ClinicManagerController {
 
     }
 
-
-
+    /**Uses providers.txt to load the GUI with all providers that work for the clinic*/
     private void loadProviders() {
         try {
             File file = new File("providers.txt");
@@ -121,116 +141,156 @@ public class ClinicManagerController {
         }
 
     }
-
-    /*private void scheduleAppointment(String[] tokens) {
+    /**given user input from gui, construct an appointment to schedule
+     * @param actionEvent is event that triggers this handler*/
+    @FXML
+    private void scheduleAppointment(ActionEvent actionEvent) {
         try {
-            if (tokens.length < 7) {
-                System.out.println("Missing tokens");
+
+            //check if first name, last name, appointment date, or dob text fields/date picker is null when schedule button was pressed
+            //also check for non-null radio buttons and non-null provider and timeslot combo boxes
+            if(tf_fnameSC.getText().isEmpty() || tf_lnameSC.getText().isEmpty() || dp_apptDateSC.getValue() == null || dp_dobSC.getValue() == null
+            || Appointment.getSelectedToggle() == null || cb_timeslotR.getValue() == null || (rb_officeVisit.isSelected() && cb_providerSC.getValue() == null)){
+
+                if (tf_fnameSC.getText().isEmpty()) {
+                    ta_outputDisplay.appendText("Missing first name. Please enter first name.\n"); //print to GUI that field is missing
+                }
+                if (tf_lnameSC.getText().isEmpty()) {
+                    ta_outputDisplay.appendText("Missing last name. Please enter last name.\n"); //print to GUI that field is missing
+                }
+                if (dp_apptDateSC.getValue() == null) {
+                    ta_outputDisplay.appendText("Missing appointment date. Please choose an appointment date.\n"); //print to GUI that field is missing
+                }
+                if (dp_dobSC.getValue() == null) {
+                    ta_outputDisplay.appendText("Missing date of birth. Please input your date of birth.\n"); //print to GUI that field is missing
+                }
+                if (Appointment.getSelectedToggle() == null) {
+                    ta_outputDisplay.appendText("Missing appointment type. Please choose a type of appointment.\n");
+                }
+                if (cb_timeslotR.getValue() == null) {
+                    ta_outputDisplay.appendText("Missing a requested timeslot for appointment. Please choose a timeslot.\n");
+                }
+                if (rb_officeVisit.isSelected() && cb_providerSC.getValue() == null) {
+                    ta_outputDisplay.appendText("Missing provider preference. Please choose a provider.\n");
+                }
                 return;
             }
-
-            String date = tokens[1];
-            String timeSlotID = tokens[2];
-            String firstName = tokens[3];
-            String lastName = tokens[4];
-            String dob = tokens[5];
-            String npiStr = tokens[6];
-            if (!this.isValidTimeslot(timeSlotID)) {
-                System.out.println(timeSlotID + " is not a valid time slot.");
-                return;
-            }
-
-            int npi;
-            try {
-                npi = Integer.parseInt(npiStr);
-            } catch (NumberFormatException var19) {
-                throw new RuntimeException("Error: NPI not a valid int");
-            }
+            //set these values to their respective text fields or date picker
+            String date = dp_apptDateSC.getEditor().getText();
+            String timeSlotID = cb_timslotSC.getValue().toString();
+            String firstName = tf_fnameSC.getText();
+            String lastName = tf_lnameSC.getText();
+            String dob = dp_dobSC.getEditor().getText();
 
             Date appointmentDate = new Date(date);
             Date birthDate = new Date(dob);
             if (!appointmentDate.isValid()) {
-                System.out.println("Error: Appointment date: " + String.valueOf(appointmentDate) + " is not valid in the calendar");
+                ta_outputDisplay.appendText("Error: Appointment date: " + String.valueOf(appointmentDate) + " is not valid in the calendar.\n");
                 return;
             }
-
             if (!appointmentDate.isNotTodayOrBefore()) {
-                System.out.println("Error: Appointment date: " + String.valueOf(appointmentDate) + " is today or before today");
+                ta_outputDisplay.appendText("Error: Appointment date: " + String.valueOf(appointmentDate) + " is today or before today.\n");
                 return;
             }
-
             if (appointmentDate.isWeekend()) {
-                System.out.println("Error: Appointment date: " + String.valueOf(appointmentDate) + " is on a weekend");
+                ta_outputDisplay.appendText("Error: Appointment date: " + String.valueOf(appointmentDate) + " is on a weekend.\n");
                 return;
             }
-
             if (!appointmentDate.isWithin6Months()) {
-                System.out.println("Error: Appointment date " + String.valueOf(appointmentDate) + " is not within six months from today");
+                ta_outputDisplay.appendText("Error: Appointment date " + String.valueOf(appointmentDate) + " is not within six months from today.\n");
                 return;
             }
-
             if (!birthDate.isValid()) {
-                System.out.println("Error: Patient date of birth: " + String.valueOf(birthDate) + " is not a valid calendar date.");
+                ta_outputDisplay.appendText("Error: Patient date of birth: " + String.valueOf(birthDate) + " is not a valid calendar date.\n");
                 return;
             }
-
             if (birthDate.isTodayOrAfter()) {
-                System.out.println("Error: Patient date of birth: " + String.valueOf(birthDate) + " is today or a future date.");
+                ta_outputDisplay.appendText("Error: Patient date of birth: " + String.valueOf(birthDate) + " is today or a future date.\n");
                 return;
             }
 
             Profile patientProfile = new Profile(firstName, lastName, birthDate);
-            Timeslot selectedTimeslot = this.getTimeslotFromString(timeSlotID);
+            Timeslot selectedTimeslot = this.getTimeslotFromString(timeSlotID); //get selected timeslot from combo box
+
+            //iterate through doctors list to check which doctor.toString matches with
+            Iterator<Doctor> var1 = this.doctors.iterator();
             Provider selectedProvider = null;
-            Iterator var14 = this.providers.iterator();
-
-            while(var14.hasNext()) {
-                Provider provider = (Provider)var14.next();
-                if (provider instanceof Doctor doctor) {
-                    if (doctor.getNpl().equals(String.valueOf(npiStr))) {
-                        selectedProvider = doctor;
-                        break;
-                    }
+            while (var1.hasNext()) { //add doctor to observable list
+                Doctor doctor = var1.next();
+                if (doctor.toString().equalsIgnoreCase(cb_providerSC.getValue())) {
+                    selectedProvider = doctor;
+                    break;
                 }
-            }
-
-            if (selectedProvider == null) {
-                System.out.println("Error: Provider with NPI " + npi + " does not exist.");
-                return;
-            }
-
-            Doctor doctor = this.findProviderByNpl(npiStr);
-            if (doctor == null) {
-                System.out.println("Error: Doctor with Npl " + npiStr + " not found.");
-                return;
             }
 
             Person patient = new Person(patientProfile);
             Appointment newAppointment = new Appointment(appointmentDate, selectedTimeslot, patient, selectedProvider);
-            Iterator var17 = this.appointmentList.iterator();
 
-            while(var17.hasNext()) {
-                Appointment existingAppointment = (Appointment)var17.next();
+            Iterator<classes.Appointment> var17 = this.appointmentList.iterator();
+            //iterate through list of appointments to see if appointment already exists in scheduler
+            while (var17.hasNext()) {
+                Appointment existingAppointment = (Appointment) var17.next();
                 if (existingAppointment.equals(newAppointment)) {
-                    System.out.println(patientProfile.toString() + " has an existing appointment at the same time slot.");
+                    ta_outputDisplay.appendText(patientProfile.toString() + " has an existing appointment at the same time slot.");
                     return;
                 }
             }
-
-            if (!this.isProviderAvailable(doctor, selectedTimeslot)) {
+            if (!this.isProviderAvailable(selectedProvider, selectedTimeslot)) {
                 return;
             }
-
             this.appointmentList.add(newAppointment);
-            PrintStream var10000 = System.out;
             String var10001 = appointmentDate.toString();
-            var10000.println(var10001 + " " + selectedTimeslot.toString() + " " + patientProfile.toString() + " [" + ((Provider)selectedProvider).toString() + "] booked.");
+            assert selectedProvider != null;
+            ta_outputDisplay.appendText(var10001 + " " + selectedTimeslot.toString() + " " + patientProfile.toString() + " [" + ((Provider) selectedProvider).toString() + "] booked.\n");
         } catch (Exception var20) {
             Exception e = var20;
-            System.out.println("Error scheduling appointment: " + e.getMessage());
+            ta_outputDisplay.appendText("Error scheduling appointment: " + e.getMessage());
         }
 
-    }*/
+    }
+
+    /**checks if provider is available at requested timeslot
+     * @param provider is the selected provider in GUI combo box
+     * @param timeslot is the selected timeslot by user in GUI
+     * @return true if provider is available, false otherwise and prints to GUI*/
+    private boolean isProviderAvailable(Provider provider, Timeslot timeslot) {
+        Iterator<classes.Appointment> var3 = this.appointmentList.iterator();
+        Appointment existingAppointment;
+        do {
+            if (!var3.hasNext()) {
+                return true;
+            }
+            existingAppointment = (Appointment)var3.next();
+        } while(!existingAppointment.getProvider().equals(provider) || !existingAppointment.getTimeslot().equals(timeslot));
+
+        String var10001 = provider.toString();
+        ta_outputDisplay.appendText(var10001 + " is not available at \n" + String.valueOf(timeslot));
+        return false;
+    }
+
+    /**applies string representation of timeslot to a timeslot
+     * @param timeSlot is the timeslot gained from user input
+     * @return timeslot representation*/
+    private Timeslot getTimeslotFromString(String timeSlot) {
+        Timeslot var10000;
+        switch (timeSlot) {
+            case "1" -> var10000 = Timeslot.slot1();
+            case "2" -> var10000 = Timeslot.slot2();
+            case "3" -> var10000 = Timeslot.slot3();
+            case "4" -> var10000 = Timeslot.slot4();
+            case "5" -> var10000 = Timeslot.slot5();
+            case "6" -> var10000 = Timeslot.slot6();
+            case "7" -> var10000 = Timeslot.slot7();
+            case "8" -> var10000 = Timeslot.slot8();
+            case "9" -> var10000 = Timeslot.slot9();
+            case "10" -> var10000 = Timeslot.slot10();
+            case "11" -> var10000 = Timeslot.slot11();
+            case "12" -> var10000 = Timeslot.slot12();
+            default -> var10000 = null;
+        }
+
+        return var10000;
+    }
 
     /**Take input from providers file to input each provider in their respective lists
      * @param line is a line separated by a new line in the providers text file*/
@@ -262,14 +322,9 @@ public class ClinicManagerController {
             this.providers.add(technician);
             this.technicians.add(technician);
         } else {
-            System.out.println("Invalid provider type."); //Erase this
+            ta_outputDisplay.appendText("Invalid provider type.\n"); //Erase this
         }
 
-    }
-
-    public ClinicManagerController() {
-        this.scanner = new Scanner(System.in); //Originally meant to read from terminal; erase this, I think
-        this.loadProviders();
     }
 
     /**prints all technicians to the text area*/
@@ -285,10 +340,11 @@ public class ClinicManagerController {
                 rotationList.append(" --> ");
             }
         }
-        ta_outputDisplay.appendText(String.valueOf(rotationList));
+        ta_outputDisplay.appendText(String.valueOf(rotationList) + "\n");
     }
 
 
+    /**clears all values from tab*/
     @FXML
     public void clearSelection(ActionEvent event) {
         tf_fnameSC.clear();

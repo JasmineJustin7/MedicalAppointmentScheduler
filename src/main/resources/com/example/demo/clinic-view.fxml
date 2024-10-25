@@ -59,7 +59,7 @@
                               </VBox>
                               <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                                  <children>
-                                    <Button id="bt_scheduleAppointment" fx:id="bt_scheduleAppt" mnemonicParsing="false" prefWidth="100.0" text="Schedule" />
+                                    <Button id="bt_scheduleAppointment" fx:id="bt_scheduleAppt" mnemonicParsing="false" onAction="#scheduleAppointment" prefWidth="100.0" text="Schedule" />
                                     <Button id="bt_cancelAppointment" fx:id="bt_cancelAppt" mnemonicParsing="false" prefWidth="100.0" text="Cancel" translateX="50.0" />
                                  </children>
                               </HBox>

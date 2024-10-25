@@ -1,14 +1,13 @@
-package util; /**
- * Represents a date with methods for validation and comparison.
- * This class implements Comparable<util.Date> to allow comparison of date instances.
- * @author: Jasmine Justin
- * @author: Jimena Reyes
- */
-
+package util;
 
 import java.text.DecimalFormat;
 import java.util.Calendar;
 
+/**Represents a date with methods for validation and comparison.
+ * This class implements Comparable<util.Date> to allow comparison of date instances.
+ * @author Jasmine Justin
+ * @author Jimena Reyes
+ */
 public class Date implements Comparable<Date> {
     public static final int QUADRENNIAL = 4;
     public static final int CENTENNIAL = 100;
@@ -17,9 +16,7 @@ public class Date implements Comparable<Date> {
     private int month;
     private int day;
 
-    /**
-     * Default constructor that initializes the date to the current date.
-     */
+    /**Default constructor that initializes the date to the current date.*/
     public Date() {
         Calendar calendar = Calendar.getInstance();
         this.year = calendar.get(Calendar.YEAR);
@@ -28,22 +25,34 @@ public class Date implements Comparable<Date> {
 
     }
 
-    /**
-     * Parameterized constructor that takes a date string in the format 'mm/dd/yyyy'.
-     * @param date A string representation of the date.
-     */
+    /**Parameterized constructor that takes a date string in the format 'yyyy-mm-dd'.
+     * @param date A string representation of the date.*/
+    /*public Date(String date) {
+        String [] values = date.split("-");
+        this.year = Integer.parseInt(values[0]);
+        this.day = Integer.parseInt(values[2]);
+        this.month = Integer.parseInt(values[1]);
+    }*/
+    /**Parameterized constructor that takes a date string in the format 'yyyy-mm-dd'.
+     * @param date A string representation of the date.*/
     public Date(String date) {
-        String [] values = date.split("/");
-        this.year = Integer.parseInt(values[2]);
-        this.day = Integer.parseInt(values[1]);
-        this.month = Integer.parseInt(values[0]);
+        if(date.contains(String.valueOf("/"))){
+            String [] values = date.split("/");
+            this.year = Integer.parseInt(values[2]);
+            this.day = Integer.parseInt(values[1]);
+            this.month = Integer.parseInt(values[0]);
+        }else{
+            String [] values = date.split("-");
+            this.year = Integer.parseInt(values[0]);
+            this.day = Integer.parseInt(values[2]);
+            this.month = Integer.parseInt(values[1]);
+        }
+
+
     }
 
-    /**
-     * Validates if the current date is a valid calendar date.
-     *
-     * @return true if the date is valid; false otherwise.
-     */
+    /**Validates if the current date is a valid calendar date.
+     * @return true if the date is valid; false otherwise.*/
     public boolean isValid() {
         if(this.month < Calendar.JANUARY + 1 || this.month > Calendar.DECEMBER + 1)
             return false;
