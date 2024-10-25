@@ -17,6 +17,8 @@ import javafx.scene.control.ToggleGroup;
 import util.Date;
 import util.List;
 import util.Sort;
+import javafx.scene.control.cell.PropertyValueFactory;//from Table zip
+import javafx.scene.control.TableView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -61,10 +63,10 @@ public class ClinicManagerController {
     private ComboBox<String> cb_providerSC;
     /**combo box that holds all timeslots for rescheduling*/
     @FXML
-    private ComboBox<?> cb_timeslotR;
+    private ComboBox<String> cb_timeslotR;
     /**combo box that holds all timeslots for scheduling and cancelling*/
     @FXML
-    private ComboBox<?> cb_timslotSC;
+    private ComboBox<String> cb_timslotSC;
     /**date picker for scheduling or cancelling appointment date*/
     @FXML
     private DatePicker dp_apptDateSC;
@@ -87,11 +89,11 @@ public class ClinicManagerController {
     @FXML
     private TextArea ta_outputDisplay;
     @FXML
-    private TableColumn<?, ?> tc_city;
+    private TableColumn<Location, String> tc_city;
     @FXML
-    private TableColumn<?, ?> tc_county;
+    private TableColumn<Location, String> tc_county;
     @FXML
-    private TableColumn<?, ?> tc_zip;
+    private TableColumn<Location, String> tc_zip;
     @FXML
     private TextField tf_fnameR;
     @FXML
@@ -343,6 +345,35 @@ public class ClinicManagerController {
         ta_outputDisplay.appendText(String.valueOf(rotationList) + "\n");
     }
 
+    /**
+     * Loads timeslots
+     */
+    @FXML
+    public void initialize() {
+        loadTimeSlots();
+    }
+
+
+    private void loadTimeSlots() {
+        ObservableList<String> timeSlots = FXCollections.observableArrayList();
+        timeSlots.add(Timeslot.slot1().toString());
+        timeSlots.add(Timeslot.slot2().toString());
+        timeSlots.add(Timeslot.slot3().toString());
+        timeSlots.add(Timeslot.slot4().toString());
+        timeSlots.add(Timeslot.slot5().toString());
+        timeSlots.add(Timeslot.slot6().toString());
+        timeSlots.add(Timeslot.slot7().toString());
+        timeSlots.add(Timeslot.slot8().toString());
+        timeSlots.add(Timeslot.slot9().toString());
+        timeSlots.add(Timeslot.slot10().toString());
+        timeSlots.add(Timeslot.slot11().toString());
+        timeSlots.add(Timeslot.slot12().toString());
+
+
+        cb_timslotSC.setItems(timeSlots);
+        cb_timeslotR.setItems(timeSlots);
+    }
+
 
     /**clears all values from tab*/
     @FXML
@@ -352,6 +383,10 @@ public class ClinicManagerController {
         dp_apptDateSC.getEditor().clear();
         dp_dobSC.getEditor().clear();
         Appointment.selectToggle(null);
+        //Clears time selection and Provider
+        cb_timslotSC.getSelectionModel().clearSelection();
+        cb_providerSC.getSelectionModel().clearSelection();
+
     }
 
 
