@@ -54,7 +54,7 @@
                                  <children>
                                     <TextField id="tf_fname" fx:id="tf_fnameSC" promptText="first name" translateY="45.0" />
                                     <TextField id="tf_lname" fx:id="tf_lnameSC" promptText="last name" translateY="45.0" />
-                                    <DatePicker fx:id="dp_dobSC" promptText="dob" translateY="45.0" />
+                                    <DatePicker fx:id="dp_dobSC" editable="false" promptText="dob" translateY="45.0" />
                                  </children>
                               </VBox>
                               <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">

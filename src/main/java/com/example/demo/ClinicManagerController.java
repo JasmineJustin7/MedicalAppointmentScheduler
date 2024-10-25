@@ -20,6 +20,7 @@ import util.Sort;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.util.Iterator;
 import java.util.Scanner;
 
@@ -115,29 +116,121 @@ public class ClinicManagerController {
             }
 
             Sort.provider(this.providers);
-            this.displayProviders();
         } catch (FileNotFoundException var4) {
             System.out.println("Error: File not found!"); //replace this with printing to text area in GUI
         }
 
     }
 
-    /**This is past displayProviders function from old clinic manager - need to delete after GUI is set up
-     * */
-    public void displayProviders() {
-        System.out.println("Providers loaded to the list."); //Erase this or put it into TextArea
-        Iterator var1 = this.providers.iterator();
-
-        while(var1.hasNext()) {
-            Provider provider = (Provider)var1.next();
-            if (provider instanceof Doctor doctor) {
-                System.out.printf("[%s %s %s, %s, %s %s] [%s, #%s]\n", doctor.getProfile().getFirstName(), doctor.getProfile().getLastName(), doctor.getProfile().getDob(), doctor.getLocation().name(), doctor.getLocation().getCounty(), doctor.getLocation().getZip(), doctor.getSpecialty().toString(), doctor.getNpl());
-            } else if (provider instanceof Technician technician) {
-                System.out.printf("[%s %s %s, %s, %s %s][rate: $%.2f]\n", technician.getProfile().getFirstName(), technician.getProfile().getLastName(), technician.getProfile().getDob(), technician.getLocation().name(), technician.getLocation().getCounty(), technician.getLocation().getZip(), (double)technician.getRatePerVisit());
+    /*private void scheduleAppointment(String[] tokens) {
+        try {
+            if (tokens.length < 7) {
+                System.out.println("Missing tokens");
+                return;
             }
+
+            String date = tokens[1];
+            String timeSlotID = tokens[2];
+            String firstName = tokens[3];
+            String lastName = tokens[4];
+            String dob = tokens[5];
+            String npiStr = tokens[6];
+            if (!this.isValidTimeslot(timeSlotID)) {
+                System.out.println(timeSlotID + " is not a valid time slot.");
+                return;
+            }
+
+            int npi;
+            try {
+                npi = Integer.parseInt(npiStr);
+            } catch (NumberFormatException var19) {
+                throw new RuntimeException("Error: NPI not a valid int");
+            }
+
+            Date appointmentDate = new Date(date);
+            Date birthDate = new Date(dob);
+            if (!appointmentDate.isValid()) {
+                System.out.println("Error: Appointment date: " + String.valueOf(appointmentDate) + " is not valid in the calendar");
+                return;
+            }
+
+            if (!appointmentDate.isNotTodayOrBefore()) {
+                System.out.println("Error: Appointment date: " + String.valueOf(appointmentDate) + " is today or before today");
+                return;
+            }
+
+            if (appointmentDate.isWeekend()) {
+                System.out.println("Error: Appointment date: " + String.valueOf(appointmentDate) + " is on a weekend");
+                return;
+            }
+
+            if (!appointmentDate.isWithin6Months()) {
+                System.out.println("Error: Appointment date " + String.valueOf(appointmentDate) + " is not within six months from today");
+                return;
+            }
+
+            if (!birthDate.isValid()) {
+                System.out.println("Error: Patient date of birth: " + String.valueOf(birthDate) + " is not a valid calendar date.");
+                return;
+            }
+
+            if (birthDate.isTodayOrAfter()) {
+                System.out.println("Error: Patient date of birth: " + String.valueOf(birthDate) + " is today or a future date.");
+                return;
+            }
+
+            Profile patientProfile = new Profile(firstName, lastName, birthDate);
+            Timeslot selectedTimeslot = this.getTimeslotFromString(timeSlotID);
+            Provider selectedProvider = null;
+            Iterator var14 = this.providers.iterator();
+
+            while(var14.hasNext()) {
+                Provider provider = (Provider)var14.next();
+                if (provider instanceof Doctor doctor) {
+                    if (doctor.getNpl().equals(String.valueOf(npiStr))) {
+                        selectedProvider = doctor;
+                        break;
+                    }
+                }
+            }
+
+            if (selectedProvider == null) {
+                System.out.println("Error: Provider with NPI " + npi + " does not exist.");
+                return;
+            }
+
+            Doctor doctor = this.findProviderByNpl(npiStr);
+            if (doctor == null) {
+                System.out.println("Error: Doctor with Npl " + npiStr + " not found.");
+                return;
+            }
+
+            Person patient = new Person(patientProfile);
+            Appointment newAppointment = new Appointment(appointmentDate, selectedTimeslot, patient, selectedProvider);
+            Iterator var17 = this.appointmentList.iterator();
+
+            while(var17.hasNext()) {
+                Appointment existingAppointment = (Appointment)var17.next();
+                if (existingAppointment.equals(newAppointment)) {
+                    System.out.println(patientProfile.toString() + " has an existing appointment at the same time slot.");
+                    return;
+                }
+            }
+
+            if (!this.isProviderAvailable(doctor, selectedTimeslot)) {
+                return;
+            }
+
+            this.appointmentList.add(newAppointment);
+            PrintStream var10000 = System.out;
+            String var10001 = appointmentDate.toString();
+            var10000.println(var10001 + " " + selectedTimeslot.toString() + " " + patientProfile.toString() + " [" + ((Provider)selectedProvider).toString() + "] booked.");
+        } catch (Exception var20) {
+            Exception e = var20;
+            System.out.println("Error scheduling appointment: " + e.getMessage());
         }
 
-    }
+    }*/
 
     /**Take input from providers file to input each provider in their respective lists
      * @param line is a line separated by a new line in the providers text file*/
@@ -177,13 +270,11 @@ public class ClinicManagerController {
     public ClinicManagerController() {
         this.scanner = new Scanner(System.in); //Originally meant to read from terminal; erase this, I think
         this.loadProviders();
-        //this.technicianRotation();
     }
 
     /**prints all technicians to the text area*/
     @FXML
     public void technicianRotation() {
-        System.out.println("List of Technicians."); //print to text area
         ta_outputDisplay.appendText("Rotation list for the technicians.\n");
         StringBuilder rotationList = new StringBuilder();
 
@@ -194,12 +285,7 @@ public class ClinicManagerController {
                 rotationList.append(" --> ");
             }
         }
-
-        System.out.println(rotationList);
-        //ObservableList<String> listOfTechnicians = FXCollections.observableArrayList();
-        //listOfTechnicians.add(String.valueOf(rotationList));
         ta_outputDisplay.appendText(String.valueOf(rotationList));
-
     }
 
 
@@ -209,6 +295,7 @@ public class ClinicManagerController {
         tf_lnameSC.clear();
         dp_apptDateSC.getEditor().clear();
         dp_dobSC.getEditor().clear();
+        //clear radiobutton
     }
 
 
