@@ -294,7 +294,7 @@ public class ClinicManagerController {
             this.appointmentList.add(newAppointment);
             String var10001 = appointmentDate.toString();
             assert selectedProvider != null;
-            ta_outputDisplay.appendText(var10001 + " " + selectedTimeslot.toString() + " " + patientProfile.toString() + " [" + ((Provider) selectedProvider).toString() + " booked.\n");
+            ta_outputDisplay.appendText(var10001 + " " + selectedTimeslot.toString() + " " + patientProfile.toString() + " [" + ((Provider) selectedProvider).toString() + "] booked.\n");
         } catch (Exception var20) {
             Exception e = var20;
             ta_outputDisplay.appendText("Error scheduling appointment: " + e.getMessage() + "\n");
@@ -331,7 +331,7 @@ public class ClinicManagerController {
                     ta_outputDisplay.appendText("Missing a requested timeslot for appointment. Please choose a timeslot.\n");
                 }
                 if (cb_services.getSelectionModel().isEmpty()) {
-                    ta_outputDisplay.appendText("Missing imaging service. Please choose a provider.\n");
+                    ta_outputDisplay.appendText("Missing imaging service. Please choose an imaging service.\n");
                 }
                 return;
             }
@@ -426,7 +426,8 @@ public class ClinicManagerController {
             Person patient = new Person(patientProfile);
             appointment = new Imaging(appointmentDate, selectedTimeslot, patient, availableTech, imagingSrv);
             this.imagingList.add(appointment);
-            ta_outputDisplay.appendText(appointment.toString() + " booked.\n");
+            ta_outputDisplay.appendText(appointment.getDate().toString() + " " + appointment.getTimeslot().toString() + " " + appointment.getPatient() + " [" +
+                    appointment.getProvider().getProfile() + ", " + appointment.getProvider().getLocation() + " [" + appointment.getRoom().toString() + "]]" + " booked.\n");
         } catch (Exception var16) {
             ta_outputDisplay.appendText("Missing tokens.\n");
         }
