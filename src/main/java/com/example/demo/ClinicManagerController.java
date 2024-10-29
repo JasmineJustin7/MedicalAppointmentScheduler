@@ -16,6 +16,7 @@ import javafx.scene.control.ToggleGroup;
 import util.Date;
 import util.List;
 import util.Sort;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.cell.PropertyValueFactory;//from Table zip
 import javafx.scene.control.TableView;
 
@@ -121,7 +122,7 @@ public class ClinicManagerController {
     @FXML
     public void displayProvidersInGUI(ActionEvent event){
         Iterator<Doctor> var1 = this.doctors.iterator();
-        while(var1.hasNext()){ //add doctor to observable list
+        while (var1.hasNext()){ //add doctor to observable list
             Doctor doctor = var1.next();
             listOfDoctors.add(doctor.toString());
         }
@@ -154,7 +155,7 @@ public class ClinicManagerController {
     /**given user input from gui, construct an appointment to schedule
      * @param actionEvent is event that triggers this handler*/
     @FXML
-    private void scheduleAppointment(ActionEvent actionEvent) {
+    private void scheduleAppointment (ActionEvent actionEvent) {
         try {
 
             //check if first name, last name, appointment date, or dob text fields/date picker is null when schedule button was pressed
@@ -263,7 +264,7 @@ public class ClinicManagerController {
      * @param provider is the selected provider in GUI combo box
      * @param timeslot is the selected timeslot by user in GUI
      * @return true if provider is available, false otherwise and prints to GUI*/
-    private boolean isProviderAvailable(Provider provider, Timeslot timeslot) {
+    private boolean isProviderAvailable (Provider provider, Timeslot timeslot) {
         Iterator<classes.Appointment> var3 = this.appointmentList.iterator();
         Appointment existingAppointment;
         do {
@@ -281,7 +282,7 @@ public class ClinicManagerController {
     /**applies string representation of timeslot to a timeslot
      * @param timeSlot is the timeslot gained from user input
      * @return timeslot representation*/
-    private Timeslot getTimeslotFromString(String timeSlot) {
+    private Timeslot getTimeslotFromString (String timeSlot) {
         Timeslot var10000;
         switch (timeSlot) {
             case "1" -> var10000 = Timeslot.slot1();
@@ -354,7 +355,7 @@ public class ClinicManagerController {
     }
 
     /**
-     * Loads timeslots
+     * Loads timeslots, and clinic locations
      */
     @FXML
     public void initialize() {
@@ -384,22 +385,130 @@ public class ClinicManagerController {
         cb_tSlotR.setItems(timeSlots);
     }
 
-    //still working//
+    @FXML
     private void loadClinicLocations() {
-
-        /**
-         * debug just to make sure anything prints at all
-         for (Location location : locations) {
-         debug(String.format("City: %s, County: %s, Zip: %s", location.name(), location.getCounty(), location.getZip()));
-         }
-         */
-        ObservableList<Location> locations = FXCollections.observableArrayList(Location.values());
-        this.tc_zip.setCellValueFactory(new PropertyValueFactory<Location, String>("zip"));
-        this.tc_city.setCellValueFactory(new PropertyValueFactory<Location, String>("name"));
-        this.tc_county.setCellValueFactory(new PropertyValueFactory<Location, String>("county"));
-        this.tableViewClinicLocations.setItems(locations);
+        ObservableList<Location> locations = FXCollections.observableArrayList (Location.values());
+        tc_city.setCellValueFactory(cellData -> new SimpleStringProperty (cellData.getValue().name())); // Use name() for the city
+        tc_county.setCellValueFactory(cellData -> new SimpleStringProperty (cellData.getValue().getCounty())); // Use getCounty() for county
+        tc_zip.setCellValueFactory(cellData -> new SimpleStringProperty (cellData.getValue().getZip())); // Use getZip() for zip
+        tableViewClinicLocations.setItems(locations);
     }
 
+    //still need to check
+    @FXML
+    void rescheduleAppointment(ActionEvent event) {
+        try {
+            //double check all information is filled in
+            if (tf_fnameR.getText().isEmpty() || tf_lnameR.getText().isEmpty() || dp_apptDR.getValue() == null || dp_dobR.getValue() == null
+                    || cb_timeslotR.getValue() == null || cb_tSlotR.getValue() == null || dp_newDR.getValue() == null) {
+
+                if (tf_fnameR.getText().isEmpty()) {
+                    ta_outputDisplay.appendText("Error: Please enter First Name.\n");
+                }
+                if (tf_lnameR.getText().isEmpty()) {
+                    ta_outputDisplay.appendText("Error: Please enter Last Name.\n");
+                }
+                if (dp_apptDR.getValue() == null) {
+                    ta_outputDisplay.appendText("Error: Please choose old Appointment Date.\n");
+                }
+                if (dp_dobR.getValue() == null) {
+                    ta_outputDisplay.appendText("Error: Please input Date of Birth.\n");
+                }
+                if (cb_timeslotR.getValue() == null) {
+                    ta_outputDisplay.appendText("Error: Please choose old Timeslot.\n");
+                }
+                if (cb_tSlotR.getValue() == null) {
+                    ta_outputDisplay.appendText("Error: Please choose new Timeslot.\n");
+                }
+                if (dp_newDR.getValue() == null) {
+                    ta_outputDisplay.appendText("Error: Please choose new Appointment Date.\n");
+                }
+                return;
+            }
+
+            String firstName = tf_fnameR.getText();
+            String lastName = tf_lnameR.getText();
+            String dob = dp_dobR.getEditor().getText();
+            String oldDate = dp_apptDR.getEditor().getText();
+            String oldTimeSlotID = cb_timeslotR.getValue().toString();
+            String newDate = dp_newDR.getEditor().getText();
+
+            //String newTimeSlotID = cb_tSlotR.getValue().toString();
+
+            //making sure appointment dates are valid
+            Date appointmentDate = new Date(oldDate);
+            Date birthDate = new Date(dob);
+
+            if (!appointmentDate.isValid()) {
+                ta_outputDisplay.appendText("Error: Appointment date: " + appointmentDate + " is not valid in the calendar.\n");
+                return;
+            }
+            if (!appointmentDate.isNotTodayOrBefore()) {
+                ta_outputDisplay.appendText("Error: Appointment date: " + appointmentDate + " is today or before today.\n");
+                return;
+            }
+            if (appointmentDate.isWeekend()) {
+                ta_outputDisplay.appendText("Error: Appointment date: " + appointmentDate + " is on a weekend.\n");
+                return;
+            }
+            if (!appointmentDate.isWithin6Months()) {
+                ta_outputDisplay.appendText("Error: Appointment date " + appointmentDate + " is not within six months from today.\n");
+                return;
+            }
+
+            // make sure Date of Births are valid
+            if (!birthDate.isValid()) {
+                ta_outputDisplay.appendText("Error: Patient date of birth: " + birthDate + " is not a valid calendar date.\n");
+                return;
+            }
+            if (birthDate.isTodayOrAfter()) {
+                ta_outputDisplay.appendText("Error: Patient date of birth: " + birthDate + " is today or a future date.\n");
+                return;
+            }
+
+            Profile patientProfile = new Profile(firstName, lastName, birthDate);
+
+            // Get the new appointment date
+            Date newAppointmentDate = new Date(newDate);
+
+            //getting timeslots
+            Timeslot newTimeslot = getTimeslotFromString(cb_tSlotR.getValue().toString());
+
+            // Finding the existing appointment
+            Appointment oldAppointment = findAppointment(appointmentDate, oldTimeSlotID, patientProfile);
+            if (oldAppointment == null) {
+                ta_outputDisplay.appendText("Error: No existing appointment found to reschedule.\n");
+                return;
+            }
+
+            // Check if the new appointment time is available
+            if (!isProviderAvailable(oldAppointment.getProvider(), newTimeslot)) {
+                ta_outputDisplay.appendText("Error: Provider is not available for the new timeslot.\n");
+                return;
+            }
+
+            // Create the new appointment and remove the old one
+            Appointment newAppointment = new Appointment(newAppointmentDate, newTimeslot, oldAppointment.getPatient(), oldAppointment.getProvider());
+            appointmentList.remove(oldAppointment);
+            appointmentList.add(newAppointment);
+            ta_outputDisplay.appendText("Appointment for " + patientProfile + " rescheduled from " + appointmentDate + " to " + newAppointmentDate + " at " + newTimeslot + ".\n");
+
+        } catch (Exception e) {
+            ta_outputDisplay.appendText("Error rescheduling appointment: " + e.getMessage() + "\n");
+        }
+    }
+
+    // Helper method to find an existing appointment
+    private Appointment findAppointment(Date date, String timeSlotID, Profile patientProfile) {
+        for (Appointment appointment : appointmentList) {
+            if (appointment.getDate().equals(date) &&
+                    appointment.getTimeslot().equals (getTimeslotFromString(timeSlotID)) &&
+                    appointment.getPatient().equals (new Person(patientProfile))) {
+                return appointment;
+            }
+        }
+        return null;
+    }
 
     /**clears all values from tab*/
     @FXML

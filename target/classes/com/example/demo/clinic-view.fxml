@@ -101,19 +101,19 @@
                            <children>
                               <TextField fx:id="tf_fnameR" promptText="First Name" GridPane.columnIndex="1" />
                               <TextField fx:id="tf_lnameR" promptText="Last Name" translateY="25.0" GridPane.columnIndex="1" />
-                              <DatePicker fx:id="dp_dobR" promptText="Date of Birth" translateY="50.0" GridPane.columnIndex="1" />
+                              <DatePicker fx:id="dp_dobR" editable="false" promptText="Date of Birth" translateY="50.0" GridPane.columnIndex="1" />
                               <ComboBox fx:id="cb_timeslotR" prefWidth="150.0" promptText="Timeslot" translateY="-1.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Current Appointment:" translateX="30.0" translateY="20.0" />
-                              <Button id="bt_rescheduleAppointment" fx:id="bt_rescheduleAppt" mnemonicParsing="false" text="Reschedule" translateX="2.0" translateY="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                              <Button id="bt_rescheduleAppointment" fx:id="bt_rescheduleAppt" mnemonicParsing="false" text="Reschedule" onAction="#rescheduleAppointment" translateX="2.0" translateY="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                  <GridPane.margin>
                                     <Insets />
                                  </GridPane.margin>
                               </Button>
-                              <DatePicker fx:id="dp_newDR" promptText="Date" translateY="-30.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <DatePicker fx:id="dp_apptDR" promptText="Appt. Date" translateX="10.0" GridPane.columnIndex="2" />
+                              <DatePicker fx:id="dp_newDR" editable="false" promptText="Date" translateY="-30.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <DatePicker fx:id="dp_apptDR" editable="false" promptText="Appt. Date" translateX="10.0" GridPane.columnIndex="2" />
                               <ComboBox fx:id="cb_tSlotR" prefWidth="150.0" promptText="Timeslot " translateX="10.0" translateY="30.0" GridPane.columnIndex="2" />
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="New Appointment:" translateX="45.0" translateY="-6.0" GridPane.rowIndex="1" />
-                              <Button id="bt_clearR" fx:id="bt_clearAppt" mnemonicParsing="false" text="Clear" onAction="#clearSelection" translateX="90.0" translateY="6.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <Button id="bt_clearR" fx:id="bt_clearAppt" mnemonicParsing="false" onAction="#clearSelection" text="Clear" translateX="90.0" translateY="6.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                            </children>
                         </GridPane>
                      </children></AnchorPane>
