@@ -55,12 +55,13 @@
                                     <TextField id="tf_fname" fx:id="tf_fnameSC" promptText="first name" translateY="45.0" />
                                     <TextField id="tf_lname" fx:id="tf_lnameSC" promptText="last name" translateY="45.0" />
                                     <DatePicker fx:id="dp_dobSC" editable="false" promptText="dob" translateY="45.0" />
+                                    <Button id="bt_clear" fx:id="bt_clearSelection" mnemonicParsing="false" onAction="#clearSelection" prefWidth="100.0" text="Clear All" translateX="200.0" translateY="20.0" />
                                  </children>
                               </VBox>
                               <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                                  <children>
                                     <Button id="bt_scheduleAppointment" fx:id="bt_scheduleAppt" mnemonicParsing="false" onAction="#scheduleAppointment" prefWidth="100.0" text="Schedule" />
-                                    <Button id="bt_cancelAppointment" fx:id="bt_cancelAppt" mnemonicParsing="false" prefWidth="100.0" text="Cancel" translateX="50.0" />
+                                    <Button id="bt_cancelAppointment" fx:id="bt_cancelAppt" mnemonicParsing="false" onAction="#cancelAppointment" prefWidth="100.0" text="Cancel" translateX="50.0" />
                                  </children>
                               </HBox>
                               <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
@@ -69,17 +70,17 @@
                                        <toggleGroup>
                                           <ToggleGroup fx:id="Appointment" />
                                        </toggleGroup></RadioButton>
-                                    <RadioButton id="rb_imaging" fx:id="rb_imaging" mnemonicParsing="false" text="Imaging Service" toggleGroup="$Appointment" translateX="75.0" />
+                                    <RadioButton id="rb_imaging" fx:id="rb_imaging" mnemonicParsing="false" onAction="#loadServices" text="Imaging Service" toggleGroup="$Appointment" translateX="75.0" />
                                  </children>
                               </HBox>
                               <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                  <children>
-                                    <ComboBox id="cb_timeslot" fx:id="cb_timslotSC" prefWidth="100.0" promptText="Timeslot" />
+                                    <ComboBox id="cb_timeslot" fx:id="cb_timeslotSC" prefWidth="100.0" promptText="Timeslot" />
                                     <ComboBox id="cb_provider" fx:id="cb_providerSC" prefWidth="100.0" promptText="Provider" translateX="50.0" />
                                  </children>
                               </HBox>
-                              <Button id="bt_loadProviders" fx:id="bt_loadProviders" mnemonicParsing="false" onAction="#displayProvidersInGUI" text="Load Providers" translateY="-18.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                              <Button id="bt_clear" fx:id="bt_clearSelection" mnemonicParsing="false" onAction="#clearSelection" prefWidth="100.0" text="Clear" translateY="-18.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                              <Button id="bt_loadProviders" fx:id="bt_loadProviders" mnemonicParsing="false" onAction="#displayProvidersInGUI" prefWidth="100.0" text="Load Providers" translateY="-18.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                              <ComboBox fx:id="cb_services" prefWidth="100.0" promptText="Services" translateY="-18.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
                            </children>
                         </GridPane>
                      </children>

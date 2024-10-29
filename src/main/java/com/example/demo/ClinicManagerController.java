@@ -20,8 +20,10 @@ import util.Sort;
 import javafx.scene.control.cell.PropertyValueFactory;//from Table zip
 import javafx.scene.control.TableView;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.util.Iterator;
 import java.util.Scanner;
 
@@ -66,7 +68,9 @@ public class ClinicManagerController {
     private ComboBox<String> cb_timeslotR;
     /**combo box that holds all timeslots for scheduling and cancelling*/
     @FXML
-    private ComboBox<String> cb_timslotSC;
+    private ComboBox<String> cb_timeslotSC;
+    @FXML
+    private ComboBox<Radiology> cb_services;
     /**date picker for scheduling or cancelling appointment date*/
     @FXML
     private DatePicker dp_apptDateSC;
@@ -139,20 +143,33 @@ public class ClinicManagerController {
 
             Sort.provider(this.providers);
         } catch (FileNotFoundException var4) {
-            System.out.println("Error: File not found!"); //replace this with printing to text area in GUI
+            //ta_outputDisplay.appendText("Error: File not found!"); //replace this with printing to text area in GUI
         }
 
     }
+
+    /**load services once imaging service radio button is clicked
+     * @param actionEvent is the event*/
+    @FXML
+    public void loadServices(ActionEvent actionEvent){
+        ObservableList<Radiology> radiologies = FXCollections.observableArrayList(Radiology.values());
+        cb_services.setItems(radiologies);
+
+    }
+
     /**given user input from gui, construct an appointment to schedule
      * @param actionEvent is event that triggers this handler*/
     @FXML
     private void scheduleAppointment(ActionEvent actionEvent) {
         try {
-
+            if(rb_imaging.isSelected()){
+                imagingAppointment(actionEvent);
+                return;
+            }
             //check if first name, last name, appointment date, or dob text fields/date picker is null when schedule button was pressed
             //also check for non-null radio buttons and non-null provider and timeslot combo boxes
             if(tf_fnameSC.getText().isEmpty() || tf_lnameSC.getText().isEmpty() || dp_apptDateSC.getValue() == null || dp_dobSC.getValue() == null
-            || Appointment.getSelectedToggle() == null || cb_timeslotR.getValue() == null || (rb_officeVisit.isSelected() && cb_providerSC.getValue() == null)){
+            || Appointment.getSelectedToggle() == null || (rb_officeVisit.isSelected() && cb_providerSC.getSelectionModel().isEmpty()) || cb_timeslotSC.getSelectionModel().isEmpty()){
 
                 if (tf_fnameSC.getText().isEmpty()) {
                     ta_outputDisplay.appendText("Missing first name. Please enter first name.\n"); //print to GUI that field is missing
@@ -169,17 +186,17 @@ public class ClinicManagerController {
                 if (Appointment.getSelectedToggle() == null) {
                     ta_outputDisplay.appendText("Missing appointment type. Please choose a type of appointment.\n");
                 }
-                if (cb_timeslotR.getValue() == null) {
+                if (cb_timeslotSC.getSelectionModel().isEmpty()) {
                     ta_outputDisplay.appendText("Missing a requested timeslot for appointment. Please choose a timeslot.\n");
                 }
-                if (rb_officeVisit.isSelected() && cb_providerSC.getValue() == null) {
+                if (rb_officeVisit.isSelected() && cb_providerSC.getSelectionModel().isEmpty()) {
                     ta_outputDisplay.appendText("Missing provider preference. Please choose a provider.\n");
                 }
                 return;
             }
             //set these values to their respective text fields or date picker
             String date = dp_apptDateSC.getEditor().getText();
-            String timeSlotID = cb_timslotSC.getValue().toString();
+            String timeSlotID = cb_timeslotSC.getValue();
             String firstName = tf_fnameSC.getText();
             String lastName = tf_lnameSC.getText();
             String dob = dp_dobSC.getEditor().getText();
@@ -212,7 +229,34 @@ public class ClinicManagerController {
             }
 
             Profile patientProfile = new Profile(firstName, lastName, birthDate);
-            Timeslot selectedTimeslot = this.getTimeslotFromString(timeSlotID); //get selected timeslot from combo box
+
+            Timeslot selectedTimeslot = null;
+            if(timeSlotID.equals(Timeslot.slot1().toString())){
+                selectedTimeslot = Timeslot.slot1();
+            }else if(timeSlotID.equals(Timeslot.slot2().toString())){
+                selectedTimeslot = Timeslot.slot2();
+            }else if(timeSlotID.equals(Timeslot.slot3().toString())){
+                selectedTimeslot = Timeslot.slot3();
+            }else if(timeSlotID.equals(Timeslot.slot4().toString())){
+                selectedTimeslot = Timeslot.slot4();
+            }else if(timeSlotID.equals(Timeslot.slot5().toString())){
+                selectedTimeslot = Timeslot.slot5();
+            }else if(timeSlotID.equals(Timeslot.slot6().toString())){
+                selectedTimeslot = Timeslot.slot6();
+            }else if(timeSlotID.equals(Timeslot.slot7().toString())){
+                selectedTimeslot = Timeslot.slot7();
+            }else if(timeSlotID.equals(Timeslot.slot8().toString())){
+                selectedTimeslot = Timeslot.slot8();
+            }else if(timeSlotID.equals(Timeslot.slot9().toString())){
+                selectedTimeslot = Timeslot.slot9();
+            }else if(timeSlotID.equals(Timeslot.slot10().toString())){
+                selectedTimeslot = Timeslot.slot10();
+            }else if(timeSlotID.equals(Timeslot.slot11().toString())){
+                selectedTimeslot = Timeslot.slot11();
+            }else if(timeSlotID.equals(Timeslot.slot12().toString())){
+                selectedTimeslot = Timeslot.slot12();
+            }
+            //Timeslot selectedTimeslot = this.getTimeslotFromString(timeSlotID); //get selected timeslot from combo box
 
             //iterate through doctors list to check which doctor.toString matches with
             Iterator<Doctor> var1 = this.doctors.iterator();
@@ -233,7 +277,7 @@ public class ClinicManagerController {
             while (var17.hasNext()) {
                 Appointment existingAppointment = (Appointment) var17.next();
                 if (existingAppointment.equals(newAppointment)) {
-                    ta_outputDisplay.appendText(patientProfile.toString() + " has an existing appointment at the same time slot.");
+                    ta_outputDisplay.appendText(patientProfile.toString() + " has an existing appointment at the same time slot.\n");
                     return;
                 }
             }
@@ -243,12 +287,334 @@ public class ClinicManagerController {
             this.appointmentList.add(newAppointment);
             String var10001 = appointmentDate.toString();
             assert selectedProvider != null;
-            ta_outputDisplay.appendText(var10001 + " " + selectedTimeslot.toString() + " " + patientProfile.toString() + " [" + ((Provider) selectedProvider).toString() + "] booked.\n");
+            ta_outputDisplay.appendText(var10001 + " " + selectedTimeslot.toString() + " " + patientProfile.toString() + " [" + ((Provider) selectedProvider).toString() + " booked.\n");
         } catch (Exception var20) {
             Exception e = var20;
-            ta_outputDisplay.appendText("Error scheduling appointment: " + e.getMessage());
+            ta_outputDisplay.appendText("Error scheduling appointment: " + e.getMessage() + "\n");
         }
 
+    }
+
+    /**event handler used to make imaging appointments
+     * will be used if radio button imaging service is selected*/
+    public void imagingAppointment(ActionEvent actionEvent) {
+        try {
+            //check if first name, last name, appointment date, or dob text fields/date picker is null when schedule button was pressed
+            //also check for non-null radio buttons and non-null imaging service combo box
+            if(tf_fnameSC.getText().isEmpty() || tf_lnameSC.getText().isEmpty() || dp_apptDateSC.getValue() == null || dp_dobSC.getValue() == null
+                    || Appointment.getSelectedToggle() == null || cb_timeslotSC.getSelectionModel().isEmpty()
+            || cb_services.getSelectionModel().isEmpty()){
+
+                if (tf_fnameSC.getText().isEmpty()) {
+                    ta_outputDisplay.appendText("Missing first name. Please enter first name.\n"); //print to GUI that field is missing
+                }
+                if (tf_lnameSC.getText().isEmpty()) {
+                    ta_outputDisplay.appendText("Missing last name. Please enter last name.\n"); //print to GUI that field is missing
+                }
+                if (dp_apptDateSC.getValue() == null) {
+                    ta_outputDisplay.appendText("Missing appointment date. Please choose an appointment date.\n"); //print to GUI that field is missing
+                }
+                if (dp_dobSC.getValue() == null) {
+                    ta_outputDisplay.appendText("Missing date of birth. Please input your date of birth.\n"); //print to GUI that field is missing
+                }
+                if (Appointment.getSelectedToggle() == null) {
+                    ta_outputDisplay.appendText("Missing appointment type. Please choose a type of appointment.\n");
+                }
+                if (cb_timeslotSC.getSelectionModel().isEmpty()) {
+                    ta_outputDisplay.appendText("Missing a requested timeslot for appointment. Please choose a timeslot.\n");
+                }
+                if (cb_services.getSelectionModel().isEmpty()) {
+                    ta_outputDisplay.appendText("Missing imaging service. Please choose a provider.\n");
+                }
+                return;
+            }
+
+            //set these values to their respective text fields or date picker
+            String date = dp_apptDateSC.getEditor().getText();
+            String timeSlotID = cb_timeslotSC.getValue();
+            String firstName = tf_fnameSC.getText();
+            String lastName = tf_lnameSC.getText();
+            String dob = dp_dobSC.getEditor().getText();
+            String imagingServices = cb_services.getValue().toString();
+
+            Date appointmentDate = new Date(date);
+            Date bday = new Date(dob);
+
+            if (!appointmentDate.isValid()) {
+                ta_outputDisplay.appendText("Error: Appointment date: " + String.valueOf(appointmentDate) + " is not valid in the calendar.\n");
+                return;
+            }
+            if (!appointmentDate.isNotTodayOrBefore()) {
+                ta_outputDisplay.appendText("Error: Appointment date: " + String.valueOf(appointmentDate) + " is today or before today.\n");
+                return;
+            }
+            if (appointmentDate.isWeekend()) {
+                ta_outputDisplay.appendText("Error: Appointment date: " + String.valueOf(appointmentDate) + " is on a weekend.\n");
+                return;
+            }
+            if (!appointmentDate.isWithin6Months()) {
+                ta_outputDisplay.appendText("Error: Appointment date " + String.valueOf(appointmentDate) + " is not within six months from today.\n");
+                return;
+            }
+            if (!bday.isValid()) {
+                ta_outputDisplay.appendText("Error: Patient date of birth: " + String.valueOf(bday) + " is not a valid calendar date.\n");
+                return;
+            }
+            if (bday.isTodayOrAfter()) {
+                ta_outputDisplay.appendText("Error: Patient date of birth: " + String.valueOf(bday) + " is today or a future date.\n");
+                return;
+            }
+            if (!this.isValidImagingService(imagingServices)) {
+                ta_outputDisplay.appendText("Error: " + imagingServices + " - imaging service not provided.\n");
+                return;
+            }
+
+            Timeslot selectedTimeslot = null;
+            if(timeSlotID.equals(Timeslot.slot1().toString())){
+                selectedTimeslot = Timeslot.slot1();
+            }else if(timeSlotID.equals(Timeslot.slot2().toString())){
+                selectedTimeslot = Timeslot.slot2();
+            }else if(timeSlotID.equals(Timeslot.slot3().toString())){
+                selectedTimeslot = Timeslot.slot3();
+            }else if(timeSlotID.equals(Timeslot.slot4().toString())){
+                selectedTimeslot = Timeslot.slot4();
+            }else if(timeSlotID.equals(Timeslot.slot5().toString())){
+                selectedTimeslot = Timeslot.slot5();
+            }else if(timeSlotID.equals(Timeslot.slot6().toString())){
+                selectedTimeslot = Timeslot.slot6();
+            }else if(timeSlotID.equals(Timeslot.slot7().toString())){
+                selectedTimeslot = Timeslot.slot7();
+            }else if(timeSlotID.equals(Timeslot.slot8().toString())){
+                selectedTimeslot = Timeslot.slot8();
+            }else if(timeSlotID.equals(Timeslot.slot9().toString())){
+                selectedTimeslot = Timeslot.slot9();
+            }else if(timeSlotID.equals(Timeslot.slot10().toString())){
+                selectedTimeslot = Timeslot.slot10();
+            }else if(timeSlotID.equals(Timeslot.slot11().toString())){
+                selectedTimeslot = Timeslot.slot11();
+            }else if(timeSlotID.equals(Timeslot.slot12().toString())){
+                selectedTimeslot = Timeslot.slot12();
+            }
+            //Timeslot selectedTimeslot = this.getTimeslotFromString(timeSlotId);
+            if (selectedTimeslot == null) {
+                ta_outputDisplay.appendText("Error: Invalid Timeslot.\n");
+                return;
+            }
+            Radiology imagingSrv = Radiology.valueOf(imagingServices.toUpperCase());
+            Technician availableTech = this.findAvailableTechnician(selectedTimeslot, imagingSrv);
+            if (availableTech == null) {
+                ta_outputDisplay.appendText("Cannot find technician at all locations for \n" + imagingServices);
+                return;
+            }
+            Profile patientProfile = new Profile(firstName, lastName, bday);
+            Iterator var14 = this.imagingList.iterator();
+            Imaging appointment;
+            while(var14.hasNext()) {
+                appointment = (Imaging)var14.next();
+                if (appointment.getDate().equals(appointmentDate) && appointment.getTimeslot().equals(selectedTimeslot) && appointment.getPatient().getProfile().equals(patientProfile)) {
+                    ta_outputDisplay.appendText("Error: an appointment with the same patient exist.\n");
+                    return;
+                }
+            }
+            Person patient = new Person(patientProfile);
+            appointment = new Imaging(appointmentDate, selectedTimeslot, patient, availableTech, imagingSrv);
+            this.imagingList.add(appointment);
+            ta_outputDisplay.appendText(appointment.toString() + " booked.\n");
+        } catch (Exception var16) {
+            ta_outputDisplay.appendText("Missing tokens.\n");
+        }
+    }
+
+    /**returns a technician that is available for the requested imaging service at requested timeslot
+     * Note: there is one room per imaging service at a given office
+     * @param imagingService is the requested service by the user
+     * @param timeslot is the requested timeslot
+     * @return a technician that is available to be added to the patient's appointment*/
+    private Technician findAvailableTechnician(Timeslot timeslot, Radiology imagingService) {
+        int startIndex = this.technicianIndex;
+        boolean technicianFound = false;
+
+        do {
+            Technician technician = (Technician)this.technicians.get(this.technicianIndex);
+            this.technicianIndex = (this.technicianIndex + 1) % this.technicians.size();
+            if (this.isTechnicianAvailable(technician, timeslot, imagingService)) {
+                technicianFound = true;
+                return technician;
+            }
+        } while(this.technicianIndex != startIndex);
+
+        return null;
+    }
+
+    /**checks if technician is available at given timeslot and given imaging service
+     * @param timeslot is the timeslot requested by the user
+     * @param technician is the provider being checked
+     * @param imagingService is the service requested for by the user
+     * @return true if technician is available, false otherwise*/
+    private boolean isTechnicianAvailable(Technician technician, Timeslot timeslot, Radiology imagingService) {
+        Iterator var4 = this.imagingList.iterator();
+
+        Imaging imagingAppointment;
+        do {
+            if (!var4.hasNext()) {
+                return true;
+            }
+
+            imagingAppointment = (Imaging)var4.next();
+        } while(!imagingAppointment.getProvider().getProfile().equals(technician.getProfile()) || !imagingAppointment.getTimeslot().equals(timeslot) || !imagingAppointment.getRoom().equals(imagingService));
+
+        return false;
+    }
+
+
+    /**checks if the given timeslot if valid
+     * @param timeslotID is the timeslot provided by the user,
+     * @return true if the timeslot is valid, false otherwise*/
+    private boolean isValidTimeslot(String timeslotID) {
+        boolean var10000;
+        switch (timeslotID) {
+            case "1":
+            case "2":
+            case "3":
+            case "4":
+            case "5":
+            case "6":
+            case "7":
+            case "8":
+            case "9":
+            case "10":
+            case "11":
+            case "12":
+                var10000 = true;
+                break;
+            default:
+                var10000 = false;
+        }
+
+        return var10000;
+    }
+
+    /**checks if the service provided is a valid imaging service
+     * @param service is the given service to be checked
+     * @return true if the service is valid, false otherwise*/
+    private boolean isValidImagingService(String service) {
+        try {
+            Radiology.valueOf(service.toUpperCase());
+            return true;
+        } catch (IllegalArgumentException var3) {
+            return false;
+        }
+    }
+
+    /**cancel appointment using GUI
+     * @param actionEvent is the event that fires this event handler*/
+    @FXML
+    public void cancelAppointment(ActionEvent actionEvent) {
+        try {
+            //check if first name, last name, appointment date, or dob text fields/date picker is null when schedule button was pressed
+            //also check for non-null radio buttons and non-null provider and timeslot combo boxes
+            if(tf_fnameSC.getText().isEmpty() || tf_lnameSC.getText().isEmpty() || dp_apptDateSC.getValue() == null || dp_dobSC.getValue() == null
+                    || cb_timeslotSC.getSelectionModel().isEmpty()){
+
+                if (tf_fnameSC.getText().isEmpty()) {
+                    ta_outputDisplay.appendText("Missing first name. Please enter first name.\n"); //print to GUI that field is missing
+                }
+                if (tf_lnameSC.getText().isEmpty()) {
+                    ta_outputDisplay.appendText("Missing last name. Please enter last name.\n"); //print to GUI that field is missing
+                }
+                if (dp_apptDateSC.getValue() == null) {
+                    ta_outputDisplay.appendText("Missing appointment date. Please choose an appointment date.\n"); //print to GUI that field is missing
+                }
+                if (dp_dobSC.getValue() == null) {
+                    ta_outputDisplay.appendText("Missing date of birth. Please input your date of birth.\n"); //print to GUI that field is missing
+                }
+                if (cb_timeslotSC.getSelectionModel().isEmpty()) {
+                    ta_outputDisplay.appendText("Missing a requested timeslot for appointment. Please choose a timeslot.\n");
+                }
+                return;
+            }
+            //set these values to their respective text fields or date picker
+            String date = dp_apptDateSC.getEditor().getText();
+            String timeSlotID = cb_timeslotSC.getValue();
+            String firstName = tf_fnameSC.getText();
+            String lastName = tf_lnameSC.getText();
+            String dob = dp_dobSC.getEditor().getText();
+
+            Date appointmentDate = new Date(date);
+            Date birthDay = new Date(dob);
+            Profile patientProfile = new Profile(firstName, lastName, birthDay);
+            Person patient = new Person(patientProfile);
+
+            Timeslot selectedTimeslot = null;
+            if(timeSlotID.equals(Timeslot.slot1().toString())){
+                selectedTimeslot = Timeslot.slot1();
+            }else if(timeSlotID.equals(Timeslot.slot2().toString())){
+                selectedTimeslot = Timeslot.slot2();
+            }else if(timeSlotID.equals(Timeslot.slot3().toString())){
+                selectedTimeslot = Timeslot.slot3();
+            }else if(timeSlotID.equals(Timeslot.slot4().toString())){
+                selectedTimeslot = Timeslot.slot4();
+            }else if(timeSlotID.equals(Timeslot.slot5().toString())){
+                selectedTimeslot = Timeslot.slot5();
+            }else if(timeSlotID.equals(Timeslot.slot6().toString())){
+                selectedTimeslot = Timeslot.slot6();
+            }else if(timeSlotID.equals(Timeslot.slot7().toString())){
+                selectedTimeslot = Timeslot.slot7();
+            }else if(timeSlotID.equals(Timeslot.slot8().toString())){
+                selectedTimeslot = Timeslot.slot8();
+            }else if(timeSlotID.equals(Timeslot.slot9().toString())){
+                selectedTimeslot = Timeslot.slot9();
+            }else if(timeSlotID.equals(Timeslot.slot10().toString())){
+                selectedTimeslot = Timeslot.slot10();
+            }else if(timeSlotID.equals(Timeslot.slot11().toString())){
+                selectedTimeslot = Timeslot.slot11();
+            }else if(timeSlotID.equals(Timeslot.slot12().toString())){
+                selectedTimeslot = Timeslot.slot12();
+            }
+            //Timeslot selectedTimeslot = this.getTimeslotFromString(timeSlotID);
+
+            boolean officeAppointmentCanceled = this.removeOfficeAppointment(appointmentDate, selectedTimeslot, patient);
+            boolean imagingAppointmentCanceled = this.removeImagingAppointment(appointmentDate, selectedTimeslot, patient);
+            String var10001;
+            if (!officeAppointmentCanceled && !imagingAppointmentCanceled) {
+                var10001 = appointmentDate.toString();
+                ta_outputDisplay.appendText(var10001 + " " + selectedTimeslot.toString() + " - " + patientProfile.toString() + " does not exist.\n");
+            } else {
+                var10001 = appointmentDate.toString();
+                ta_outputDisplay.appendText(var10001 + " " + selectedTimeslot.toString() + " - " + patientProfile.toString() + " appointment has been canceled.\n");
+            }
+        } catch (Exception var14) {
+            ta_outputDisplay.appendText("Error: ");
+        }
+
+    }
+
+    /**remove the imaging appointment from the scheduler
+     * @param timeslot is the timeslot provided by user
+     * @return true if imaging appointment was removed, false otherwise*/
+    private boolean removeImagingAppointment(Date appointmentDate, Timeslot timeslot, Person patientProfile) {
+        for(int i = 0; i < this.imagingList.size(); ++i) {
+            Imaging imagingAppointment = (Imaging)this.imagingList.get(i);
+            if (imagingAppointment.getDate().equals(appointmentDate) && imagingAppointment.getTimeslot().equals(timeslot) && imagingAppointment.getPatient().equals(patientProfile)) {
+                this.imagingList.remove(imagingAppointment);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**removes office appointment from list of appointments
+     * @return true is office appointment was successfully removed, false otherwise*/
+    private boolean removeOfficeAppointment(Date appointmentDate, Timeslot timeslot, Person patientProfile) {
+        for(int i = 0; i < this.appointmentList.size(); ++i) {
+            Appointment appointment = (Appointment)this.appointmentList.get(i);
+            if (appointment.getDate().equals(appointmentDate) && appointment.getTimeslot().equals(timeslot) && appointment.getPatient().equals(patientProfile)) {
+                this.appointmentList.remove(appointment);
+                return true;
+            }
+        }
+        return false;
     }
 
     /**checks if provider is available at requested timeslot
@@ -353,7 +719,6 @@ public class ClinicManagerController {
         loadTimeSlots();
     }
 
-
     private void loadTimeSlots() {
         ObservableList<String> timeSlots = FXCollections.observableArrayList();
         timeSlots.add(Timeslot.slot1().toString());
@@ -369,8 +734,7 @@ public class ClinicManagerController {
         timeSlots.add(Timeslot.slot11().toString());
         timeSlots.add(Timeslot.slot12().toString());
 
-
-        cb_timslotSC.setItems(timeSlots);
+        cb_timeslotSC.setItems(timeSlots);
         cb_timeslotR.setItems(timeSlots);
     }
 
@@ -384,7 +748,7 @@ public class ClinicManagerController {
         dp_dobSC.getEditor().clear();
         Appointment.selectToggle(null);
         //Clears time selection and Provider
-        cb_timslotSC.getSelectionModel().clearSelection();
+        cb_timeslotSC.getSelectionModel().clearSelection();
         cb_providerSC.getSelectionModel().clearSelection();
 
     }
