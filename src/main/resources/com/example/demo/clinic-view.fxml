@@ -75,7 +75,7 @@
                               </HBox>
                               <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                  <children>
-                                    <ComboBox id="cb_timeslot" fx:id="cb_timeslotSC" prefWidth="100.0" promptText="Timeslot" />
+                                    <ComboBox id="cb_timeslot" fx:id="cb_timeslotSC" onAction="#loadTimeSlots" prefWidth="100.0" promptText="Timeslot" />
                                     <ComboBox id="cb_provider" fx:id="cb_providerSC" prefWidth="100.0" promptText="Provider" translateX="50.0" />
                                  </children>
                               </HBox>
@@ -88,88 +88,60 @@
             </content>
           </Tab>
           <Tab text="Reschedule">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <GridPane layoutY="-1.0" prefHeight="368.0" prefWidth="600.0">
-                          <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                          </columnConstraints>
-                          <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
-                           <children>
-                              <TextField fx:id="tf_fnameR" promptText="first name" GridPane.columnIndex="1" />
-                              <TextField fx:id="tf_lnameR" promptText="last name" translateY="25.0" GridPane.columnIndex="1" />
-                              <DatePicker fx:id="dp_dobR" promptText="date of birth" translateY="50.0" GridPane.columnIndex="1" />
-                              <ComboBox fx:id="cb_timeslotR" prefWidth="150.0" promptText="Timeslot" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Patient" translateX="150.0" translateY="20.0" />
-                              <Button mnemonicParsing="false" text="Reschedule" translateX="65.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                                 <GridPane.margin>
-                                    <Insets />
-                                 </GridPane.margin>
-                              </Button>
-                           </children>
-                        </GridPane>
-                     </children></AnchorPane>
-            </content>
+              <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                      <children>
+                          <GridPane layoutY="-1.0" prefHeight="368.0" prefWidth="600.0">
+                              <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="250.0" minWidth="10.0" prefWidth="162.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="314.0" minWidth="10.0" prefWidth="188.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="266.0" minWidth="10.0" prefWidth="246.0" />
+                              </columnConstraints>
+                              <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              </rowConstraints>
+                              <children>
+                                  <TextField fx:id="tf_fnameR" promptText="First Name" GridPane.columnIndex="1" />
+                                  <TextField fx:id="tf_lnameR" promptText="Last Name" translateY="25.0" GridPane.columnIndex="1" />
+                                  <DatePicker fx:id="dp_dobR" editable="false" promptText="Date of Birth" translateY="50.0" GridPane.columnIndex="1" />
+                                  <ComboBox fx:id="cb_timeslotR" prefWidth="150.0" promptText="Timeslot" translateY="-1.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Current Appointment:" translateX="30.0" translateY="20.0" />
+                                  <Button id="bt_rescheduleAppointment" fx:id="bt_rescheduleAppt" mnemonicParsing="false" text="Reschedule" onAction="#rescheduleAppointment" translateX="2.0" translateY="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                      <GridPane.margin>
+                                          <Insets />
+                                      </GridPane.margin>
+                                  </Button>
+                                  <DatePicker fx:id="dp_newDR" editable="false" promptText="Date" translateY="-30.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                  <DatePicker fx:id="dp_apptDR" editable="false" promptText="Appt. Date" translateX="10.0" GridPane.columnIndex="2" />
+                                  <ComboBox fx:id="cb_tSlotR" prefWidth="150.0" promptText="Timeslot " translateX="10.0" translateY="30.0" GridPane.columnIndex="2" />
+                                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="New Appointment:" translateX="45.0" translateY="-6.0" GridPane.rowIndex="1" />
+                                  <Button id="bt_clearR" fx:id="bt_clearAppt" mnemonicParsing="false" onAction="#clearSelection" text="Clear" translateX="90.0" translateY="6.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              </children>
+                          </GridPane>
+                      </children></AnchorPane>
+              </content>
           </Tab>
             <Tab text="Clinic Locations">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <TableView prefHeight="359.0" prefWidth="600.0">
-                          <columns>
-                            <TableColumn id="tbCol_city" fx:id="tc_city" prefWidth="75.0" text="City" />
-                            <TableColumn id="tbCol_county" fx:id="tc_county" prefWidth="75.0" text="County" />
-                              <TableColumn id="tbCol_zip" fx:id="tc_zip" prefWidth="75.0" text="Zip" />
-                          </columns>
-                        </TableView>
-                     </children>
-                  </AnchorPane>
-              </content>
-            </Tab>
-            <Tab text="Demo Menu">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <Label text="Demo Menu" />
-                        <MenuBar id="mb_demoMenu" layoutX="33.0" layoutY="96.0" prefHeight="25.0">
-                          <menus>
-                            <Menu id="menu_appointment" fx:id="m_appt" mnemonicParsing="false" text="Appoinrment">
-                              <items>
-                                <MenuItem id="mi_schedule" mnemonicParsing="false" text="Schedule" />
-                                    <MenuItem id="mi_cancel" mnemonicParsing="false" text="Cancel" />
-                                    <MenuItem id="mi_reschedule" mnemonicParsing="false" text="Reschedule" />
-                              </items>
-                            </Menu>
-                            <Menu fx:id="m_listOfAppts" mnemonicParsing="false" text="List of Appointments">
-                              <items>
-                                    <MenuItem mnemonicParsing="false" text="by Location (county/date/time)" />
-                                <MenuItem mnemonicParsing="false" text="Office Visit Only" />
-                                    <MenuItem mnemonicParsing="false" text="Imaging Service Only" />
-                                    <MenuItem mnemonicParsing="false" text="By Date/Time/Provider" />
-                              </items>
-                            </Menu>
-                            <Menu fx:id="m_statement" mnemonicParsing="false" text="Statement">
-                              <items>
-                                <MenuItem mnemonicParsing="false" text="About" />
-                              </items>
-                            </Menu>
-                          </menus>
-                        </MenuBar>
-                     </children>
-                  </AnchorPane>
-              </content>
+                <content>
+                    <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                        <children>
+                            <TableView fx:id="tableViewClinicLocations" layoutX="35.0" layoutY="14.0" prefHeight="307.0" prefWidth="534.0">
+                                <columns>
+                                    <TableColumn fx:id="tc_city" prefWidth="200.0" text="City" />
+                                    <TableColumn fx:id="tc_county" prefWidth="200.0" text="County" />
+                                    <TableColumn fx:id="tc_zip" prefWidth="133.0" text="Zip" />
+                                </columns>
+                            </TableView>
+                        </children>
+                    </AnchorPane>
+                </content>
             </Tab>
         </tabs>
       </TabPane>
    </center>
-   <bottom>
-      <TextArea fx:id="ta_outputDisplay" prefHeight="200.0" prefWidth="200.0" wrapText="true" BorderPane.alignment="CENTER" />
-   </bottom>
+    <bottom>
+        <TextArea fx:id="ta_outputDisplay" prefHeight="200.0" prefWidth="200.0" wrapText="true" BorderPane.alignment="CENTER" />
+    </bottom>
 </BorderPane>
