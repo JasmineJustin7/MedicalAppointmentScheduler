@@ -17,7 +17,6 @@ import util.Date;
 import util.List;
 import util.Sort;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.scene.control.cell.PropertyValueFactory;//from Table zip
 import javafx.scene.control.TableView;
 
 import java.io.File;
@@ -583,7 +582,7 @@ public class ClinicManagerController {
         } while(!existingAppointment.getProvider().equals(provider) || !existingAppointment.getTimeslot().equals(timeslot));
 
         String var10001 = provider.toString();
-        ta_outputDisplay.appendText(var10001 + " is not available at " + String.valueOf(timeslot) + "\n");
+        //ta_outputDisplay.appendText(var10001 + " is not available at " + String.valueOf(timeslot) + "\n");
         return false;
     }
 
@@ -701,7 +700,8 @@ public class ClinicManagerController {
         tableViewClinicLocations.setItems(locations);
     }
 
-    /**reschedule user appointment*/
+    /**reschedule user appointment
+     * @param event is the event that triggers this event handler*/
     @FXML
     void rescheduleAppointment(ActionEvent event) {
         try {
