@@ -1,3 +1,8 @@
+/**
+ * This class controls the GUI functionality.
+ * @author: Jasmine Justin
+ * @author: Jimena Reyes
+ */
 package com.example.demo;
 
 import classes.*;
@@ -17,9 +22,7 @@ import util.Date;
 import util.List;
 import util.Sort;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.scene.control.cell.PropertyValueFactory;//from Table zip
 import javafx.scene.control.TableView;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Iterator;
@@ -583,7 +586,7 @@ public class ClinicManagerController {
         } while(!existingAppointment.getProvider().equals(provider) || !existingAppointment.getTimeslot().equals(timeslot));
 
         String var10001 = provider.toString();
-        ta_outputDisplay.appendText(var10001 + " is not available at " + String.valueOf(timeslot) + "\n");
+        //ta_outputDisplay.appendText(var10001 + " is not available at " + String.valueOf(timeslot) + "\n");
         return false;
     }
 
@@ -731,8 +734,8 @@ public class ClinicManagerController {
                 ta_outputDisplay.appendText("Error: New appointment details are the same as the existing appointment.\n");
                 return;
             }
+
             if (!isProviderAvailable(oldAppointment.getProvider(), newTimeslot)) {
-                ta_outputDisplay.appendText("Error: Provider is not available for the new timeslot.\n");
                 return;
             }
             // Create and replace old appointment with new one
