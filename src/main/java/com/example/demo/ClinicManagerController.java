@@ -612,7 +612,7 @@ public class ClinicManagerController {
         } while(!existingAppointment.getProvider().equals(provider) || !existingAppointment.getTimeslot().equals(timeslot));
 
         String var10001 = provider.toString();
-        ta_outputDisplay.appendText(var10001 + " is not available at \n" + String.valueOf(timeslot));
+        ta_outputDisplay.appendText(var10001 + " is not available at " + String.valueOf(timeslot) + "\n");
         return false;
     }
 
