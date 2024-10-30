@@ -108,7 +108,7 @@
                                   <DatePicker fx:id="dp_dobR" editable="false" promptText="Date of Birth" translateY="50.0" GridPane.columnIndex="1" />
                                   <ComboBox fx:id="cb_timeslotR" prefWidth="150.0" promptText="Timeslot" translateY="-1.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Current Appointment:" translateX="30.0" translateY="20.0" />
-                                  <Button id="bt_rescheduleAppointment" fx:id="bt_rescheduleAppt" mnemonicParsing="false" text="Reschedule" onAction="#rescheduleAppointment" translateX="2.0" translateY="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                  <Button id="bt_rescheduleAppointment" fx:id="bt_rescheduleAppt" mnemonicParsing="false" onAction="#rescheduleAppointment" text="Reschedule" translateX="2.0" translateY="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                       <GridPane.margin>
                                           <Insets />
                                       </GridPane.margin>

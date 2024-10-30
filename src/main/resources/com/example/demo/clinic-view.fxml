@@ -124,57 +124,24 @@
               </content>
           </Tab>
             <Tab text="Clinic Locations">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <TableView prefHeight="359.0" prefWidth="600.0">
-                          <columns>
-                            <TableColumn id="tbCol_city" fx:id="tc_city" prefWidth="75.0" text="City" />
-                            <TableColumn id="tbCol_county" fx:id="tc_county" prefWidth="75.0" text="County" />
-                              <TableColumn id="tbCol_zip" fx:id="tc_zip" prefWidth="75.0" text="Zip" />
-                          </columns>
-                        </TableView>
-                     </children>
-                  </AnchorPane>
-              </content>
-            </Tab>
-            <Tab text="Demo Menu">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <Label text="Demo Menu" />
-                        <MenuBar id="mb_demoMenu" layoutX="33.0" layoutY="96.0" prefHeight="25.0">
-                          <menus>
-                            <Menu id="menu_appointment" fx:id="m_appt" mnemonicParsing="false" text="Appoinrment">
-                              <items>
-                                <MenuItem id="mi_schedule" mnemonicParsing="false" text="Schedule" />
-                                    <MenuItem id="mi_cancel" mnemonicParsing="false" text="Cancel" />
-                                    <MenuItem id="mi_reschedule" mnemonicParsing="false" text="Reschedule" />
-                              </items>
-                            </Menu>
-                            <Menu fx:id="m_listOfAppts" mnemonicParsing="false" text="List of Appointments">
-                              <items>
-                                    <MenuItem mnemonicParsing="false" text="by Location (county/date/time)" />
-                                <MenuItem mnemonicParsing="false" text="Office Visit Only" />
-                                    <MenuItem mnemonicParsing="false" text="Imaging Service Only" />
-                                    <MenuItem mnemonicParsing="false" text="By Date/Time/Provider" />
-                              </items>
-                            </Menu>
-                            <Menu fx:id="m_statement" mnemonicParsing="false" text="Statement">
-                              <items>
-                                <MenuItem mnemonicParsing="false" text="About" />
-                              </items>
-                            </Menu>
-                          </menus>
-                        </MenuBar>
-                     </children>
-                  </AnchorPane>
-              </content>
+                <content>
+                    <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                        <children>
+                            <TableView fx:id="tableViewClinicLocations" layoutX="35.0" layoutY="14.0" prefHeight="307.0" prefWidth="534.0">
+                                <columns>
+                                    <TableColumn fx:id="tc_city" prefWidth="200.0" text="City" />
+                                    <TableColumn fx:id="tc_county" prefWidth="200.0" text="County" />
+                                    <TableColumn fx:id="tc_zip" prefWidth="133.0" text="Zip" />
+                                </columns>
+                            </TableView>
+                        </children>
+                    </AnchorPane>
+                </content>
             </Tab>
         </tabs>
       </TabPane>
    </center>
-   <bottom>
-      <TextArea fx:id="ta_outputDisplay" prefHeight="200.0" prefWidth="200.0" wrapText="true" BorderPane.alignment="CENTER" />
-   </bottom>
+    <bottom>
+        <TextArea fx:id="ta_outputDisplay" prefHeight="200.0" prefWidth="200.0" wrapText="true" BorderPane.alignment="CENTER" />
+    </bottom>
 </BorderPane>
