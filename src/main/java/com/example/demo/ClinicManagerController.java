@@ -738,7 +738,7 @@ public class ClinicManagerController {
         try {
             //double check all information is filled in
             if (tf_fnameR.getText().isEmpty() || tf_lnameR.getText().isEmpty() || dp_apptDR.getValue() == null || dp_dobR.getValue() == null
-                    || cb_timeslotR.getValue() == null || cb_tSlotR.getValue() == null || dp_newDR.getValue() == null) {
+                    || cb_timeslotR.getSelectionModel().isEmpty() || cb_tSlotR.getSelectionModel().isEmpty()|| dp_newDR.getValue() == null) {
 
                 if (tf_fnameR.getText().isEmpty()) {
                     ta_outputDisplay.appendText("Error: Please enter First Name.\n");
@@ -752,10 +752,10 @@ public class ClinicManagerController {
                 if (dp_dobR.getValue() == null) {
                     ta_outputDisplay.appendText("Error: Please input Date of Birth.\n");
                 }
-                if (cb_timeslotR.getValue() == null) {
+                if (cb_tSlotR.getSelectionModel().isEmpty()) {
                     ta_outputDisplay.appendText("Error: Please choose old Timeslot.\n");
                 }
-                if (cb_tSlotR.getValue() == null) {
+                if (cb_timeslotR.getSelectionModel().isEmpty()) {
                     ta_outputDisplay.appendText("Error: Please choose new Timeslot.\n");
                 }
                 if (dp_newDR.getValue() == null) {
@@ -767,65 +767,42 @@ public class ClinicManagerController {
             String firstName = tf_fnameR.getText();
             String lastName = tf_lnameR.getText();
             String dob = dp_dobR.getEditor().getText();
-            String oldDate = dp_apptDR.getEditor().getText();
-            String oldTimeSlotID = cb_timeslotR.getValue().toString();
-            String newDate = dp_newDR.getEditor().getText();
+            String oldDate = dp_apptDR.getEditor().getText(); // Old appointment date
+            String oldTimeSlotID = cb_tSlotR.getValue(); // Old timeslot
+            String newDate = dp_newDR.getEditor().getText(); // New appointment date
+            String newTimeSlotID = cb_timeslotR.getValue(); // New timeslot
 
-            //String newTimeSlotID = cb_tSlotR.getValue().toString();
-
-            //making sure appointment dates are valid
-            Date appointmentDate = new Date(oldDate);
+            // Convert dates and timeslots
+            Date appointmentDate = new Date(oldDate); // Old date
+            Date newAppointmentDate = new Date(newDate); // New date
             Date birthDate = new Date(dob);
+            Timeslot newTimeslot = getTimeslotFromString(newTimeSlotID); // New timeslot
 
-            if (!appointmentDate.isValid()) {
-                ta_outputDisplay.appendText("Error: Appointment date: " + appointmentDate + " is not valid in the calendar.\n");
-                return;
-            }
-            if (!appointmentDate.isNotTodayOrBefore()) {
-                ta_outputDisplay.appendText("Error: Appointment date: " + appointmentDate + " is today or before today.\n");
-                return;
-            }
-            if (appointmentDate.isWeekend()) {
-                ta_outputDisplay.appendText("Error: Appointment date: " + appointmentDate + " is on a weekend.\n");
-                return;
-            }
-            if (!appointmentDate.isWithin6Months()) {
-                ta_outputDisplay.appendText("Error: Appointment date " + appointmentDate + " is not within six months from today.\n");
-                return;
-            }
-
-            // make sure Date of Births are valid
-            if (!birthDate.isValid()) {
-                ta_outputDisplay.appendText("Error: Patient date of birth: " + birthDate + " is not a valid calendar date.\n");
-                return;
-            }
-            if (birthDate.isTodayOrAfter()) {
-                ta_outputDisplay.appendText("Error: Patient date of birth: " + birthDate + " is today or a future date.\n");
-                return;
-            }
-
+            // Validate profile
             Profile patientProfile = new Profile(firstName, lastName, birthDate);
+            System.out.println("Searching for appointment on date: " + appointmentDate +
+                    ", old timeslot ID: " + oldTimeSlotID +
+                    ", for patient: " + patientProfile);
 
-            // Get the new appointment date
-            Date newAppointmentDate = new Date(newDate);
-
-            //getting timeslots
-            Timeslot newTimeslot = getTimeslotFromString(cb_tSlotR.getValue().toString());
-
-            // Finding the existing appointment
+            // Find existing appointment
             Appointment oldAppointment = findAppointment(appointmentDate, oldTimeSlotID, patientProfile);
             if (oldAppointment == null) {
                 ta_outputDisplay.appendText("Error: No existing appointment found to reschedule.\n");
                 return;
             }
 
-            // Check if the new appointment time is available
+            // Check if the new appointment date is different
+            if (newAppointmentDate.equals(appointmentDate) && newTimeslot.equals(oldAppointment.getTimeslot())) {
+                ta_outputDisplay.appendText("Error: New appointment details are the same as the existing appointment.\n");
+                return;
+            }
+
             if (!isProviderAvailable(oldAppointment.getProvider(), newTimeslot)) {
                 ta_outputDisplay.appendText("Error: Provider is not available for the new timeslot.\n");
                 return;
             }
 
-            // Create the new appointment and remove the old one
+            // Create and replace old appointment with new one
             Appointment newAppointment = new Appointment(newAppointmentDate, newTimeslot, oldAppointment.getPatient(), oldAppointment.getProvider());
             appointmentList.remove(oldAppointment);
             appointmentList.add(newAppointment);
@@ -836,12 +813,30 @@ public class ClinicManagerController {
         }
     }
 
+
     // Helper method to find an existing appointment
     private Appointment findAppointment(Date date, String timeSlotID, Profile patientProfile) {
+        System.out.println("Searching for appointment on date: " + date +
+                ", timeslot ID: " + timeSlotID +
+                ", for patient: " + patientProfile);
+
+        Timeslot requestedTimeslot = getTimeslotFromString(timeSlotID);
         for (Appointment appointment : appointmentList) {
-            if (appointment.getDate().equals(date) &&
-                    appointment.getTimeslot().equals (getTimeslotFromString(timeSlotID)) &&
-                    appointment.getPatient().equals (new Person(patientProfile))) {
+            System.out.println("Checking appointment: " + appointment +
+                    ", Date: " + appointment.getDate() +
+                    ", Timeslot: " + appointment.getTimeslot() +
+                    ", Patient: " + appointment.getPatient());
+
+            // Debug each comparison
+            boolean dateMatch = appointment.getDate().equals(date);
+            boolean timeslotMatch = appointment.getTimeslot().equals(requestedTimeslot);
+            boolean patientMatch = appointment.getPatient().equals(new Person(patientProfile)); // Adjusted
+
+            System.out.println("Date match: " + dateMatch +
+                    ", Timeslot match: " + timeslotMatch +
+                    ", Patient match: " + patientMatch);
+
+            if (dateMatch && timeslotMatch && patientMatch) {
                 return appointment;
             }
         }
