@@ -4,16 +4,22 @@ import java.text.DecimalFormat;
 import java.util.Calendar;
 
 /**Represents a date with methods for validation and comparison.
- * This class implements Comparable<util.Date> to allow comparison of date instances.
+ * This class implements Comparable util.Date to allow comparison of date instances.
  * @author Jasmine Justin
  * @author Jimena Reyes
  */
 public class Date implements Comparable<Date> {
+    /**constant value associated with 4*/
     public static final int QUADRENNIAL = 4;
+    /**constant value associated with value 100*/
     public static final int CENTENNIAL = 100;
+    /**constant value 400*/
     public static final int QUATERCENTENNIAL = 400;
+    /**holds the year portion of date*/
     private int year;
+    /**holds the month portion of date*/
     private int month;
+    /**hold s the day portion of date*/
     private int day;
 
     /**Default constructor that initializes the date to the current date.*/

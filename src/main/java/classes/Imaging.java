@@ -8,7 +8,9 @@ package classes;
 
 import util.Date;
 
+/**Class that holds information about imaging appointments, a subclass of Appointment*/
 public class Imaging extends Appointment{
+    /**stores the imaging service in imaging appointment*/
     private Radiology room;
 
     /**

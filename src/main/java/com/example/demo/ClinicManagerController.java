@@ -78,6 +78,7 @@ public class ClinicManagerController {
     /**combo box that holds all timeslots for scheduling and cancelling*/
     @FXML
     private ComboBox<Radiology> cb_services;
+    /**combo box to hold services provided in imaging*/
     @FXML
     private ComboBox<String> cb_timeslotSC;
     /**date picker for new appointment*/
@@ -586,7 +587,7 @@ public class ClinicManagerController {
         } while(!existingAppointment.getProvider().equals(provider) || !existingAppointment.getTimeslot().equals(timeslot));
 
         String var10001 = provider.toString();
-        //ta_outputDisplay.appendText(var10001 + " is not available at " + String.valueOf(timeslot) + "\n");
+        ta_outputDisplay.appendText(var10001 + " is not available at " + String.valueOf(timeslot) + "\n");
         return false;
     }
 

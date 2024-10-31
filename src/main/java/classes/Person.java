@@ -6,7 +6,10 @@
  */
 package classes;
 
+/**Person class is the parent class of Patient and Provider and provides the profiles of both*/
 public class Person  implements Comparable<Person> {
+
+    /**profile of a given person; first name, last name, date of birth*/
     protected Profile profile;
 
     /**

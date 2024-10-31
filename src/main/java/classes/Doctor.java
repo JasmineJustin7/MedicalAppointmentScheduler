@@ -5,9 +5,14 @@
  */
 package classes;
 
+/**Class to hold information about Doctors, a subclass of Provider
+ * @author Jimena Reyes
+ * @author Jasmine Justin*/
 public class Doctor extends Provider {
-    private Specialty specialty;  //encapsulate the rate per visit based on speciality
-    private String npl; //National Provider Identification unique to the doctor
+    /**encapsulate the rate per visit based on speciality*/
+    private Specialty specialty;
+    /**National Provider Identification unique to the doctor*/
+    private String npl;
 
     /**
      * Constructs a Doctor with the specified profile, location, specialty, and NPI.

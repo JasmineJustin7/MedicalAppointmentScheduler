@@ -7,6 +7,7 @@
 package classes;
 
 public class Patient extends Person {
+    /**stores a list of visits associated with one patient*/
     private Visit visit;
 
     /**
@@ -23,10 +24,11 @@ public class Patient extends Person {
      * Getter that returns the visit record of the patient.
      * @return The patient's visit record
      */
-
     public Profile getProfile(){
         return super.profile;
     }
+
+    /**return specific appointment in linked list*/
     public Visit getVisit() {
         return this.visit;
     }

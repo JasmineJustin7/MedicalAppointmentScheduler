@@ -1,16 +1,19 @@
-package util; /**
- * This class provides various methods to manipulate and access the elements in the list.
- * @author: Jasmine Justin
- * @author: Jimena Reyes
- */
+package util;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-
+/**
+ * This class provides various methods to manipulate and access the elements in the list.
+ * @author Jasmine Justin
+ * @author Jimena Reyes
+ */
 public class List <E> implements Iterable<E> {
 
+    /**holds a generic array type of objects*/
     private E[] objects;
+    /**holds the size of the object array*/
     private int size;
+    /**holds the initial capacity of array*/
     private static final int DEFAULT_CAPACITY = 4;
 
     /**
@@ -130,11 +133,15 @@ public class List <E> implements Iterable<E> {
         return find(e);
     }
 
-    /**
-     * An iterator for the util.List class.
-     */
+    /**An iterator for the util.List class.
+     * @param <E> is the general list*/
     private class ListIterator<E> implements Iterator<E> {
+
+        /**keeps track of index in iterable*/
         private int currentIndex = 0;
+
+        /**checks if iterable has any next elements
+         * @return true if iterable has more elements, false otherwise*/
         public boolean hasNext() {
             return currentIndex < size;
         }

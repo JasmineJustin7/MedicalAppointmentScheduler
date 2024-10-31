@@ -4,16 +4,25 @@
  * @author: Jimena Reyes
  */
 package classes;
+/**enum class that holds the locations, city, counties and zipcodes of the locations associated with clinic*/
 public enum Location {
 
+    /**Bridgewater location*/
     BRIDGEWATER("Somerset", "08807"),
+    /**Edison location*/
     EDISON("Middlesex", "08817"),
+    /**Clark location*/
     CLARK("Union", "07066"),
+    /**Princeton location*/
     PRINCETON("Mercer", "08542"),
+    /**Piscataway location*/
     PISCATAWAY("Middlesex", "08854"),
+    /**Morristown location*/
     MORRISTOWN("Morris", "07960");
 
+    /**String value that stores county of location*/
     private final String county;
+    /**String value that stores zip of location*/
     private final String zip;
 
 

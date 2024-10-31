@@ -7,11 +7,16 @@ package classes;
 
 import util.Date;
 
+/**class that creates objects to hold patient information and further information about appointment*/
 public class Appointment implements Comparable<Appointment> {
 
+    /**date of appointment*/
     protected Date date;
+    /**timeslot of appointment*/
     protected Timeslot timeslot;
+    /**patient profile*/
     protected Person patient;
+    /**provider information including type of provider, location, and profile*/
     protected Person provider;
 
     /**
