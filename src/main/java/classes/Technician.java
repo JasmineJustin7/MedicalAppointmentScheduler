@@ -6,7 +6,9 @@
 package classes;
 import util.Date;
 
+/**a subclass of provider that specialize in imaging services*/
 public class Technician extends Provider {
+    /**associates a rate per provider and depends on the provider*/
     private int ratePerVisit;
 
     /**
@@ -106,7 +108,7 @@ public class Technician extends Provider {
         return super.compareTo(other);
     }
 
-    //Test Code
+    /**Test Code*/
     public static void main(String[] args) {
         // Create mock objects for testing
         Profile profile = new Profile("John", "Doe", new Date());

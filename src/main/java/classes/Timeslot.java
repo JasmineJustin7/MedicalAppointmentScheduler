@@ -1,13 +1,16 @@
-/**
- * This class supports comparison and provides static methods for creating predefined time slots.
- * @author: Jasmine Justin
- * @author: Jimena Reyes
- */
+
 package classes;
 import java.sql.Time;
 
+/**
+ * This class supports comparison and provides static methods for creating predefined time slots.
+ * @author Jasmine Justin
+ * @author Jimena Reyes
+ */
 public class Timeslot implements Comparable<Timeslot>{
+    /**hour of timeslot*/
     private int hour;
+    /**minute of timeslot*/
     private int minute;
 
     /**
@@ -90,61 +93,85 @@ public class Timeslot implements Comparable<Timeslot>{
     }
 
     /**
-     * Creates a Timeslot representing 10:45 AM.
-     * @return a Timeslot object for 10:45 AM
+     * Creates a Timeslot representing 9:30 AM.
+     * @return a Timeslot object for 9:30 AM
      */
     public static Timeslot slot2() {
         return new Timeslot(9, 30);
     }
 
     /**
-     * Creates a Timeslot representing 11:15 AM.
-     * @return a Timeslot object for 11:15 AM
+     * Creates a Timeslot representing 10:00 AM.
+     * @return a Timeslot object for 10:00 AM
      */
     public static Timeslot slot3() {
         return new Timeslot(10, 0);
     }
 
     /**
-     * Creates a Timeslot representing 1:30 PM.
-     * @return a Timeslot object for 1:30 PM
+     * Creates a Timeslot representing 10:30 PM.
+     * @return a Timeslot object for 10:30 PM
      */
     public static Timeslot slot4() {
         return new Timeslot(10, 30);
     }
 
     /**
-     * Creates a Timeslot representing 3:00 PM.
-     * @return a Timeslot object for 3:00 PM
+     * Creates a Timeslot representing 11:00 PM.
+     * @return a Timeslot object for 11:00 PM
      */
     public static Timeslot slot5() {
         return new Timeslot(11, 0);
     }
 
     /**
-     * Creates a Timeslot representing 4:15 PM.
-     * @return a Timeslot object for 4:15 PM
+     * Creates a Timeslot representing 11:30PM.
+     * @return a Timeslot object for 11:30 PM
      */
     public static Timeslot slot6() {
         return new Timeslot(11, 30);
     }
 
     //Afternoon slots
+    /**
+     * Creates a Timeslot representing 2:00 PM.
+     * @return a Timeslot object for 2:00 PM
+     */
     public static Timeslot slot7() {
         return new Timeslot(14, 0);
     }
+    /**
+     * Creates a Timeslot representing 2:30 PM.
+     * @return a Timeslot object for 2:30 PM
+     */
     public static Timeslot slot8() {
         return new Timeslot(14, 30);
     }
+    /**
+     * Creates a Timeslot representing 3:00 PM.
+     * @return a Timeslot object for 3:00 PM
+     */
     public static Timeslot slot9() {
         return new Timeslot(15, 0);
     }
+    /**
+     * Creates a Timeslot representing 3:30 PM.
+     * @return a Timeslot object for 3:30 PM
+     */
     public static Timeslot slot10() {
         return new Timeslot(15, 30);
     }
+    /**
+     * Creates a Timeslot representing 4:00 PM.
+     * @return a Timeslot object for 4:00 PM
+     */
     public static Timeslot slot11() {
         return new Timeslot(16, 0);
     }
+    /**
+     * Creates a Timeslot representing 4:30 PM.
+     * @return a Timeslot object for 4:3o PM
+     */
     public static Timeslot slot12() {
         return new Timeslot(16, 30);
     }

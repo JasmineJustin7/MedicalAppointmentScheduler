@@ -8,7 +8,12 @@ package classes;
  * The Radiology enum defines the types of available imaging services.
  */
 public enum Radiology {
-    CATSCAN, ULTRASOUND, XRAY;
+    /**type of imaging appointment*/
+    CATSCAN,
+    /**type of imaging appointment*/
+    ULTRASOUND,
+    /**type of imaging appointment*/
+    XRAY;
 
     /**
      * Returns a string representation of the Radiology type.

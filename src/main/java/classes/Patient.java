@@ -6,6 +6,7 @@
  */
 package classes;
 
+/**subclass of person that holds patient information for appointments and medical record*/
 public class Patient extends Person {
     /**stores a list of visits associated with one patient*/
     private Visit visit;
@@ -28,7 +29,8 @@ public class Patient extends Person {
         return super.profile;
     }
 
-    /**return specific appointment in linked list*/
+    /**return specific appointment in linked list
+     * @return appointment in linked list*/
     public Visit getVisit() {
         return this.visit;
     }

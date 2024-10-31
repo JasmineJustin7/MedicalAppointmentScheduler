@@ -6,8 +6,9 @@
  */
 package classes;
 
-
+/**abstract class that holds information about a given provider including location and rate*/
 public abstract class Provider extends Person {
+    /**given provider's location*/
     private Location location;
 
     /**

@@ -115,6 +115,7 @@ public class ClinicManagerController {
      */
     @FXML
     private ComboBox<Radiology> cb_services;
+    /**combo box to display timeslots in schedule/cancel tab*/
     @FXML
     private ComboBox<String> cb_timeslotSC;
     /**
@@ -824,6 +825,7 @@ public class ClinicManagerController {
 
     /**
      * reschedule user appointment
+     * @param event is the event that triggers this event handler
      */
     @FXML
     void rescheduleAppointment(ActionEvent event) {

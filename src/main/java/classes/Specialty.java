@@ -5,12 +5,17 @@
  */
 
 package classes;
+/**enum class that holds the different specialties a provider can specialize in*/
 public enum Specialty {
 
+    /**a type of specialty with a fixed rate of 250*/
     FAMILY(250),
+    /**a type of specialty with a fixed rate of 300*/
     ALLERGIST(300),
+    /**a type of specialty with a fixed rate of 350*/
     PEDIATRICIAN(350);
 
+    /**charge denotes the rate of each specialty*/
     private final int charge;
 
     /**

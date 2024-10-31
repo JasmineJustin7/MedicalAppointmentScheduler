@@ -10,6 +10,7 @@ import classes.Provider;
 import java.util.Comparator;
 
 
+/**class used to sort a generic list in different ways using different keys*/
 public class Sort {
     /**
      * Sorts a list of appointments based on the specified key.

@@ -8,9 +8,13 @@ package classes;
 
 import util.Date;
 
+/**class to hold first name, last name and date of birth of a given person*/
 public class Profile implements Comparable<Profile> {
+    /**stores person's first name*/
     private String fname;
+    /**stores person's last name*/
     private String lname;
+    /**stores person's date of birth*/
     private Date dob;
 
     /**

@@ -1,13 +1,15 @@
+
+package classes;
 /**
  * Represents a visit in a linked list of appointments.
  * Each visit contains an appointment and a reference to the next visit in the list.
- * @author: Jasmine Justin
- * @author: Jimena Reyes
+ * @author Jasmine Justin
+ * @author Jimena Reyes
  */
-package classes;
-
 public class Visit {
+    /**appointment holds patient information and associated provider and timeslot information*/
     private Appointment appointment;
+    /**reference to next appointment in linked list*/
     private Visit next;
 
     /**
