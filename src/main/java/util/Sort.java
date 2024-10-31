@@ -34,7 +34,6 @@ public class Sort {
             default:
                 throw new IllegalArgumentException("Invalid sorting key " + key);
         }
-
     }
 
     /**
@@ -45,11 +44,11 @@ public class Sort {
         bubbleSort(list, (p1, p2) -> p1.getProfile().compareTo(p2.getProfile()));
 
     }
+
     /**
      * Sorts a list of imaging appointments by county, date, and time.
      * @param list the list of imaging appointments to sort
      */
-
     public static void sortedByDate(List<Appointment> list) {
         // Sort by date, time, and provider's name in one method
         bubbleSort(list, (a, b) -> {
@@ -69,6 +68,11 @@ public class Sort {
             return a.getProvider().getProfile().compareTo(b.getProvider().getProfile());
         });
     }
+
+    /**
+     * Sorts a list of appointments by patient profile, appointment date, and timeslot.
+     * @param list the list of appointments to be sorted.
+     */
     public static void sortByPatient(List<Appointment> list) {
         bubbleSort(list, (a, b) -> {
             // First compare by patient profile (first name, last name, dob)
@@ -88,6 +92,10 @@ public class Sort {
         });
     }
 
+    /**
+     * Sorts a list of appointments by provider's county, appointment date, and timeslot.
+     * @param list the list of appointments to be sorted.
+     */
     public static void sortByCounty(List<Appointment> list) {
         bubbleSort(list, (a, b) -> {
             // First, compare by the provider's location (county)
@@ -106,6 +114,11 @@ public class Sort {
             return a.getTimeslot().compareTo(b.getTimeslot());
         });
     }
+
+    /**
+     * Sorts a list of imaging appointments by provider's county, appointment date, and timeslot.
+     * @param list the list of imaging appointments to be sorted.
+     */
     public static void imagingAppointment(List<Imaging> list) {
         bubbleSort(list, (a, b) -> {
             // Get provider locations (ensure they're not null)
@@ -133,6 +146,10 @@ public class Sort {
         });
     }
 
+    /**
+     * Sorts a list of office appointments by provider's county, appointment date, and timeslot.
+     * @param list the list of office appointments to be sorted.
+     */
     public static void officeAppointment(List<Appointment> list) {
         bubbleSort(list, (a, b) -> {
             // Compare provider's location (assume provider is a Doctor in office appointments)
@@ -151,6 +168,7 @@ public class Sort {
             return a.getTimeslot().compareTo(b.getTimeslot());
         });
     }
+
     /**
      * Sorts a list of patients by their profile (first name, last name, and DOB).
      * @param list the list of patients to sort
@@ -173,7 +191,6 @@ public class Sort {
             return a.getProfile().getDob().compareTo(b.getProfile().getDob());
         });
     }
-
 
     /**
      * A private helper method that performs bubble sort on the provided list.
