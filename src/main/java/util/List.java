@@ -1,9 +1,9 @@
-package util; /**
+package util;
+/**
  * This class provides various methods to manipulate and access the elements in the list.
  * @author: Jasmine Justin
  * @author: Jimena Reyes
  */
-
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
