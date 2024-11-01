@@ -988,6 +988,7 @@ public class ClinicManagerController {
 
     /**displays appointments sorted by date
      * @param actionEvent is the event that triggers this handler*/
+    @FXML
     public void displayAppointmentsSortedByDate(ActionEvent actionEvent) {
         if (this.appointmentList.isEmpty()) {
             System.out.println("Schedule calendar is empty.");
@@ -1007,6 +1008,7 @@ public class ClinicManagerController {
 
     /**displays appointments sorted by patient
      * @param actionEvent is the event that triggers this handler*/
+    @FXML
     public void displayAppointmentsSortedByPatient(ActionEvent actionEvent) {
         if (this.appointmentList.isEmpty()) {
             System.out.println("Schedule calendar is empty.");
@@ -1026,6 +1028,7 @@ public class ClinicManagerController {
 
     /**displays appointments sorted by county
      * @param actionEvent is the event that triggers this handler*/
+    @FXML
     public void displayAppointmentsSortedByCounty(ActionEvent actionEvent) {
         if (this.appointmentList.isEmpty()) {
             System.out.println("Schedule calendar is empty.");
@@ -1044,6 +1047,7 @@ public class ClinicManagerController {
 
     /**displays billing statements
      * @param actionEvent is the event that triggers this handler*/
+    @FXML
     public void displayBillingStatements(ActionEvent actionEvent) {
         if (this.appointmentList.isEmpty()) {
             System.out.println("Schedule calendar is empty.");
@@ -1110,8 +1114,10 @@ public class ClinicManagerController {
         }
     }
 
+
     /**displays office appointments
      * @param actionEvent is the event that triggers this handler*/
+    @FXML
     public void displayOfficeAppointments(ActionEvent actionEvent) {
         if (this.appointmentList.isEmpty()) {
             System.out.println("Schedule calendar is empty.");
@@ -1132,6 +1138,7 @@ public class ClinicManagerController {
     }
     /**displays imaging appointments
      * @param actionEvent is the event that triggers this handler*/
+    @FXML
     public void displayImagingAppointments(ActionEvent actionEvent) {
         if (this.imagingList.isEmpty()) {
             System.out.println("Schedule calendar is empty.");
@@ -1151,6 +1158,7 @@ public class ClinicManagerController {
 
     /**displays credit
      * @param actionEvent is the event that triggers this handler*/
+    @FXML
     public void displayExpectedCredit(ActionEvent actionEvent) {
         if (this.appointmentList.isEmpty()) {
             System.out.println("Schedule calendar is empty.");
