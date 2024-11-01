@@ -27,7 +27,7 @@ import javafx.scene.control.MenuItem;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.PrintStream;
+import java.text.DecimalFormat;
 import java.util.Iterator;
 import java.util.Scanner;
 
@@ -353,7 +353,8 @@ public class ClinicManagerController {
             this.appointmentList.add(newAppointment);
             String var10001 = appointmentDate.toString();
             assert selectedProvider != null;
-            ta_outputDisplay.appendText(var10001 + " " + selectedTimeslot.toString() + " " + patientProfile.toString() + " [" + ((Provider) selectedProvider).toString() + "] booked.\n");
+            ta_outputDisplay.appendText(var10001 + " " + selectedTimeslot.toString() + " " + patientProfile.toString() +
+                    " [" + ((Provider) selectedProvider).toString() + "] booked.\n");
         } catch (Exception var20) {
             ta_outputDisplay.appendText("Error scheduling appointment: " + var20.getMessage() + "\n");
         }
@@ -452,8 +453,10 @@ public class ClinicManagerController {
             appointment = new Imaging(appointmentDate, selectedTimeslot, patient, availableTech, imagingSrv);
             this.imagingList.add(appointment);
             this.appointmentList.add(appointment);
-            ta_outputDisplay.appendText(appointment.getDate().toString() + " " + appointment.getTimeslot().toString() + " " + appointment.getPatient() + " [" +
-                    appointment.getProvider().getProfile() + ", " + appointment.getProvider().getLocation() + " [" + appointment.getRoom().toString() + "]]" + " booked.\n");
+            DecimalFormat df = new DecimalFormat("#.00");
+            ta_outputDisplay.appendText(appointment.getDate().toString() + " " + appointment.getTimeslot().toString() + " " +
+                    appointment.getPatient() + " [" + appointment.getProvider().getProfile() + ", " + appointment.getProvider().getLocation()
+                    + " [" + appointment.getRoom().toString() + "]" + "[rate: " + df.format(appointment.getProvider().rate()) + "]] booked.\n");
         } catch (Exception var16) {
             ta_outputDisplay.appendText("Missing tokens.\n");
         }
@@ -1036,7 +1039,7 @@ public class ClinicManagerController {
             for(Appointment item : listOfAppointmentsByDate){
                 ta_outputDisplay.appendText(item.toString() + "\n");
             }
-            ta_outputDisplay.appendText("**end of list**\n");
+            ta_outputDisplay.appendText("** end of list **\n");
         }
     }
 
@@ -1085,6 +1088,7 @@ public class ClinicManagerController {
             for(Appointment item : listOfAppointmentsByCounty){
                 ta_outputDisplay.appendText(item.toString() + "\n");
             }
+            ta_outputDisplay.appendText("** end of list **\n");
 
         }
     }
@@ -1103,10 +1107,12 @@ public class ClinicManagerController {
 
             while(var1.hasNext()) {
                 Appointment officeAppointment = (Appointment)var1.next();
-                String var10001 = officeAppointment.getDate().toString();
                 listOfOfficeAppointments.add(officeAppointment);
-            }
+                if(officeAppointment instanceof Imaging){
+                    listOfOfficeAppointments.remove(officeAppointment);
+                }
 
+            }
             for(Appointment item : listOfOfficeAppointments){
                 ta_outputDisplay.appendText(item.getDate().toString()+ " " + item.getTimeslot().toString() + " " +
                         item.getPatient().getProfile().toString() + " [" + item.getProvider().toString() + "]\n");
@@ -1136,7 +1142,7 @@ public class ClinicManagerController {
                 ta_outputDisplay.appendText(item.toString() + "\n");
             }
 
-            ta_outputDisplay.appendText("**end of list**\n");
+            ta_outputDisplay.appendText("** end of list **\n");
         }
     }
 
@@ -1174,7 +1180,8 @@ public class ClinicManagerController {
                         totalCredit += provider.rate();
                     }
                 }
-                ta_outputDisplay.appendText("(" + i + 1 + ")" + "[credit amount: " + totalCredit + "] " + provider.getProfile().toString());
+                DecimalFormat df = new DecimalFormat("#.00");
+                ta_outputDisplay.appendText("(" + (i + 1) + ") " + "[Credit amount: " + df.format(totalCredit) + "] " + provider.getProfile().toString() + "\n");
             }
             ta_outputDisplay.appendText("** end of list **\n");
         }
@@ -1225,7 +1232,8 @@ public class ClinicManagerController {
         for (int i = 0; i < uniquePatients.size(); i++) {
             Person patient = uniquePatients.get(i);
             double totalDue = patientBills[i];
-            ta_outputDisplay.appendText("(" + i + 1 + ")" + " [due: " + totalDue + "] " + patient.getProfile().toString() + "\n");
+            DecimalFormat df = new DecimalFormat("#.00");
+            ta_outputDisplay.appendText("(" + (i + 1) + ")" + " [Due: " + df.format(totalDue) + "] " + patient.getProfile().toString() + "\n");
         }
         ta_outputDisplay.appendText("** end of list **\n");
     }
