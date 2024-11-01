@@ -5,6 +5,7 @@ import java.util.NoSuchElementException;
 /**This class provides various methods to manipulate and access the elements in the list.
  * @author Jasmine Justin
  * @author Jimena Reyes
+ * @param <E> is the general list type
  */
 public class List <E> implements Iterable<E> {
 

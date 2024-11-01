@@ -108,7 +108,8 @@ public class Technician extends Provider {
         return super.compareTo(other);
     }
 
-    /**Test Code*/
+    /**Test Code
+     * @param args takes input from args*/
     public static void main(String[] args) {
         // Create mock objects for testing
         Profile profile = new Profile("John", "Doe", new Date());
