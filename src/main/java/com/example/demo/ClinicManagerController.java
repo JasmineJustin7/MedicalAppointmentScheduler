@@ -23,6 +23,7 @@ import util.List;
 import util.Sort;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.TableView;
+import javafx.scene.control.MenuItem;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -199,6 +200,55 @@ public class ClinicManagerController {
      */
     @FXML
     private TextField tf_lnameSC;
+
+    /**
+     * button for clearing data in the Service Summary tab
+     */
+    @FXML
+    private Button bt_clearSS;
+
+    /**
+     * button for printing the data depending on the appointment radio button selected
+     */
+
+    @FXML
+    private Button bt_printSS;
+    /**
+     * menu item for imaging services only
+     */
+    @FXML
+    private MenuItem mi_imagingSS;
+
+    /**
+     * menu item for patient statement
+     */
+    @FXML
+    private MenuItem mi_patientSS;
+
+    /**
+     * menu item for provider credit amount
+     */
+    @FXML
+    private MenuItem mi_providerSS;
+
+    /**
+     * menu item for sorting by date
+     */
+    @FXML
+    private MenuItem mi_sortByDateSS;
+
+    /**
+     * menu item for sorting my location
+     */
+    @FXML
+    private MenuItem mi_sortByLocationSS;
+
+    /**
+     * menu item for sorting by office visits only
+     */
+    @FXML
+    private MenuItem mi_visitsSS;
+
 
     /**
      * default constructor of clinic manager controller
