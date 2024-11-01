@@ -26,6 +26,7 @@ import javafx.scene.control.TableView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.util.Iterator;
 import java.util.Scanner;
 
@@ -984,4 +985,220 @@ public class ClinicManagerController {
         dp_dobR.getEditor().clear();
         dp_newDR.getEditor().clear();
     }
+
+    /**displays appointments sorted by date
+     * @param actionEvent is the event that triggers this handler*/
+    public void displayAppointmentsSortedByDate(ActionEvent actionEvent) {
+        if (this.appointmentList.isEmpty()) {
+            System.out.println("Schedule calendar is empty.");
+        } else {
+            System.out.println("\n** List of appointments, ordered by date/time/provider.\n");
+            Sort.sortedByDate(this.appointmentList);
+            Iterator var1 = this.appointmentList.iterator();
+
+            while(var1.hasNext()) {
+                Appointment appointment = (Appointment)var1.next();
+                System.out.println(appointment.toString());
+            }
+
+            System.out.println("**end of list**\n");
+        }
+    }
+
+    /**displays appointments sorted by patient
+     * @param actionEvent is the event that triggers this handler*/
+    public void displayAppointmentsSortedByPatient(ActionEvent actionEvent) {
+        if (this.appointmentList.isEmpty()) {
+            System.out.println("Schedule calendar is empty.");
+        } else {
+            Sort.sortByPatient(this.appointmentList);
+            System.out.println("** List of appointments, ordered by first name/last name/dob.");
+            Iterator var1 = this.appointmentList.iterator();
+
+            while(var1.hasNext()) {
+                Appointment appointment = (Appointment)var1.next();
+                System.out.println(appointment.toString());
+            }
+
+            System.out.println("**end of list**\n");
+        }
+    }
+
+    /**displays appointments sorted by county
+     * @param actionEvent is the event that triggers this handler*/
+    public void displayAppointmentsSortedByCounty(ActionEvent actionEvent) {
+        if (this.appointmentList.isEmpty()) {
+            System.out.println("Schedule calendar is empty.");
+        } else {
+            Sort.sortByCounty(this.appointmentList);
+            System.out.println("\n** List of appointments, ordered by county/date/time.\n");
+            Iterator var1 = this.appointmentList.iterator();
+
+            while(var1.hasNext()) {
+                Appointment appointment = (Appointment)var1.next();
+                System.out.println(appointment.toString());
+            }
+
+        }
+    }
+
+    /**displays billing statements
+     * @param actionEvent is the event that triggers this handler*/
+    public void displayBillingStatements(ActionEvent actionEvent) {
+        if (this.appointmentList.isEmpty()) {
+            System.out.println("Schedule calendar is empty.");
+        } else {
+            List<Person> uniquePatients = new List();
+            double[] patientBills = new double[this.appointmentList.size()];
+
+            int i;
+            for(i = 0; i < this.appointmentList.size(); ++i) {
+                Appointment appointment = (Appointment)this.appointmentList.get(i);
+                Person patient = appointment.getPatient();
+                Provider provider = appointment.getProvider();
+                double charge = 0.0;
+                if (provider instanceof Doctor) {
+                    Doctor doctor = (Doctor)provider;
+                    double var10000;
+                    switch (doctor.getSpecialty()) {
+                        case FAMILY -> var10000 = 250.0;
+                        case PEDIATRICIAN -> var10000 = 300.0;
+                        case ALLERGIST -> var10000 = 350.0;
+                        default -> var10000 = 0.0;
+                    }
+
+                    charge = var10000;
+                } else if (provider instanceof Technician) {
+                    charge = (double)provider.rate();
+                }
+
+                boolean patientExists = false;
+
+                for(int j = 0; j < uniquePatients.size(); ++j) {
+                    if (((Person)uniquePatients.get(j)).equals(patient)) {
+                        patientBills[j] += charge;
+                        patientExists = true;
+                        break;
+                    }
+                }
+
+                if (!patientExists) {
+                    uniquePatients.add(patient);
+                    patientBills[uniquePatients.size() - 1] = charge;
+                }
+            }
+
+            Sort.patient(uniquePatients);
+            System.out.println("\n** Billing statement ordered by patient. **");
+
+            for(i = 0; i < uniquePatients.size(); ++i) {
+                Person patient = (Person)uniquePatients.get(i);
+                double totalDue = patientBills[i];
+                System.out.printf("(%d) %s [due: $%.2f]\n", i + 1, patient.getProfile().toString(), totalDue);
+            }
+
+            System.out.println("** end of list **\n");
+
+            while(!this.appointmentList.isEmpty()) {
+                this.appointmentList.remove((Appointment)this.appointmentList.get(0));
+            }
+
+            while(!this.imagingList.isEmpty()) {
+                this.imagingList.remove((Imaging)this.imagingList.get(0));
+            }
+
+        }
+    }
+
+    /**displays office appointments
+     * @param actionEvent is the event that triggers this handler*/
+    public void displayOfficeAppointments(ActionEvent actionEvent) {
+        if (this.appointmentList.isEmpty()) {
+            System.out.println("Schedule calendar is empty.");
+        } else {
+            Sort.officeAppointment(this.appointmentList);
+            System.out.println("** List of office appointments ordered by county/date/time.");
+            Iterator var1 = this.appointmentList.iterator();
+
+            while(var1.hasNext()) {
+                Appointment officeAppointment = (Appointment)var1.next();
+                PrintStream var10000 = System.out;
+                String var10001 = officeAppointment.getDate().toString();
+                var10000.println(var10001 + " " + officeAppointment.getTimeslot().toString() + " " + officeAppointment.getPatient().getProfile().toString() + " [" + officeAppointment.getProvider().toString() + "]");
+            }
+
+            System.out.println("** end of list **");
+        }
+    }
+    /**displays imaging appointments
+     * @param actionEvent is the event that triggers this handler*/
+    public void displayImagingAppointments(ActionEvent actionEvent) {
+        if (this.imagingList.isEmpty()) {
+            System.out.println("Schedule calendar is empty.");
+        } else {
+            Sort.imagingAppointment(this.imagingList);
+            System.out.println("\n** List of radiology appointments ordered by county/date/time");
+            Iterator var1 = this.imagingList.iterator();
+
+            while(var1.hasNext()) {
+                Imaging imagingAppointments = (Imaging)var1.next();
+                System.out.println(imagingAppointments.toString());
+            }
+
+            System.out.println("**end of list**\n");
+        }
+    }
+
+    /**displays credit
+     * @param actionEvent is the event that triggers this handler*/
+    public void displayExpectedCredit(ActionEvent actionEvent) {
+        if (this.appointmentList.isEmpty()) {
+            System.out.println("Schedule calendar is empty.");
+        } else {
+            List<Provider> uniqueProviders = new List();
+            Iterator var2 = this.appointmentList.iterator();
+
+            Iterator var6;
+            while(var2.hasNext()) {
+                Appointment appointment = (Appointment)var2.next();
+                Provider provider = appointment.getProvider();
+                boolean providerExists = false;
+                var6 = uniqueProviders.iterator();
+
+                while(var6.hasNext()) {
+                    Provider existingProvider = (Provider)var6.next();
+                    if (existingProvider.equals(provider)) {
+                        providerExists = true;
+                        break;
+                    }
+                }
+
+                if (!providerExists) {
+                    uniqueProviders.add(provider);
+                }
+            }
+
+            Sort.provider(uniqueProviders);
+            System.out.println("\n** Credit amount ordered by provider. **"); //use ta_output
+
+            for(int i = 0; i < uniqueProviders.size(); ++i) {
+                Provider provider = (Provider)uniqueProviders.get(i);
+                double totalCredit = 0.0;
+                var6 = this.appointmentList.iterator();
+
+                while(var6.hasNext()) {
+                    Appointment appointment = (Appointment)var6.next();
+                    if (appointment.getProvider().equals(provider)) {
+                        totalCredit += (double)provider.rate();
+                    }
+                }
+
+                System.out.printf("(%d) %s [credit amount: $%.2f]\n", i + 1, provider.getProfile().toString(), totalCredit);
+            }
+
+            System.out.println("** end of list **\n");
+        }
+    }
+
+
 }
