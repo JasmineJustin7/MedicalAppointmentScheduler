@@ -138,6 +138,49 @@
                     </AnchorPane>
                 </content>
             </Tab>
+            <Tab text="Service Summary">
+                <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <children>
+                            <GridPane prefHeight="339.0" prefWidth="600.0">
+                                <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="206.0" minWidth="10.0" prefWidth="79.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="551.0" minWidth="10.0" prefWidth="521.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                    <RowConstraints maxHeight="109.0" minHeight="0.0" prefHeight="95.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="184.0" minHeight="10.0" prefHeight="57.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="171.0" minHeight="10.0" prefHeight="65.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="160.0" minHeight="10.0" prefHeight="129.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Appointment Menu" translateX="22.0" translateY="40.0" wrappingWidth="112.46875" GridPane.columnIndex="1" />
+                                    <MenuBar maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="28.0" prefWidth="181.0" translateX="128.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                        <menus>
+                                            <Menu id="Sort By" mnemonicParsing="false" text="Sort By">
+                                                <items>
+                                                    <MenuItem id="County/date/time" fx:id="mi_sortByLocationSS" mnemonicParsing="false" onAction="#displayAppointmentsSortedByCounty" text="County/date/time" />
+                                                    <MenuItem id="Date/time/provider" fx:id="mi_sortByDateSS" mnemonicParsing="false" onAction="#displayAppointmentsSortedByDate" text="Date/time/provider" />
+                                                    <MenuItem id="Office Visits Only" fx:id="mi_visitsSS" mnemonicParsing="false" onAction="#displayOfficeAppointments" text="Office Visits Only" />
+                                                    <MenuItem id="Imaging Service Only" fx:id="mi_imagingSS" mnemonicParsing="false" onAction="#displayImagingAppointments" text="Imaging Services Only" />
+                                                </items>
+                                            </Menu>
+                                            <Menu id="Select Statement" mnemonicParsing="false" text="Statement Type">
+                                                <items>
+                                                    <MenuItem id="Patient(Billing)" fx:id="mi_patientSS" mnemonicParsing="false" text="Patient(Billing)" />
+                                                    <MenuItem id="Provider(Credit Amount)" fx:id="mi_providerSS" mnemonicParsing="false" text="Provider(Credit Amount)" />
+                                                </items>
+                                            </Menu>
+                                        </menus>
+                                    </MenuBar>
+                                    <Button fx:id="bt_clearSS" mnemonicParsing="false" text="Clear" translateX="202.0" translateY="-0.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                </children>
+                            </GridPane>
+                        </children>
+                    </AnchorPane>
+                </content>
+            </Tab>
+
         </tabs>
       </TabPane>
    </center>

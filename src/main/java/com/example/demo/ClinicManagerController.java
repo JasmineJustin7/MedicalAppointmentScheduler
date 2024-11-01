@@ -210,7 +210,6 @@ public class ClinicManagerController {
     /**
      * button for printing the data depending on the appointment radio button selected
      */
-
     @FXML
     private Button bt_printSS;
     /**
@@ -1040,19 +1039,24 @@ public class ClinicManagerController {
      * @param actionEvent is the event that triggers this handler*/
     @FXML
     public void displayAppointmentsSortedByDate(ActionEvent actionEvent) {
+        ObservableList<Appointment> listOfAppointmentsByDate = FXCollections.observableArrayList();
+
         if (this.appointmentList.isEmpty()) {
-            System.out.println("Schedule calendar is empty.");
+            ta_outputDisplay.appendText("Schedule calendar is empty.\n");
         } else {
-            System.out.println("\n** List of appointments, ordered by date/time/provider.\n");
+            ta_outputDisplay.appendText("\n** List of appointments, ordered by date/time/provider.\n");
             Sort.sortedByDate(this.appointmentList);
             Iterator var1 = this.appointmentList.iterator();
 
             while(var1.hasNext()) {
                 Appointment appointment = (Appointment)var1.next();
-                System.out.println(appointment.toString());
+                listOfAppointmentsByDate.add(appointment);
+                ta_outputDisplay.appendText(appointment.toString() + "\n");
+                ta_outputDisplay.appendText(listOfAppointmentsByDate.toString());
+
             }
 
-            System.out.println("**end of list**\n");
+            ta_outputDisplay.appendText("**end of list**\n");
         }
     }
 
@@ -1060,19 +1064,24 @@ public class ClinicManagerController {
      * @param actionEvent is the event that triggers this handler*/
     @FXML
     public void displayAppointmentsSortedByPatient(ActionEvent actionEvent) {
+        ObservableList<Appointment> listOfAppointmentsByPatient = FXCollections.observableArrayList();
+
         if (this.appointmentList.isEmpty()) {
-            System.out.println("Schedule calendar is empty.");
+            ta_outputDisplay.appendText("Schedule calendar is empty.\n");
         } else {
             Sort.sortByPatient(this.appointmentList);
-            System.out.println("** List of appointments, ordered by first name/last name/dob.");
+            ta_outputDisplay.appendText("** List of appointments, ordered by first name/last name/dob.\n");
             Iterator var1 = this.appointmentList.iterator();
 
             while(var1.hasNext()) {
                 Appointment appointment = (Appointment)var1.next();
-                System.out.println(appointment.toString());
+                listOfAppointmentsByPatient.add(appointment);
+                ta_outputDisplay.appendText(appointment.toString() + "\n");
+                ta_outputDisplay.appendText(listOfAppointmentsByPatient.toString());
+
             }
 
-            System.out.println("**end of list**\n");
+            ta_outputDisplay.appendText("**end of list**\n");
         }
     }
 
@@ -1080,16 +1089,20 @@ public class ClinicManagerController {
      * @param actionEvent is the event that triggers this handler*/
     @FXML
     public void displayAppointmentsSortedByCounty(ActionEvent actionEvent) {
+        ObservableList<Appointment> listOfAppointmentsByCounty = FXCollections.observableArrayList();
         if (this.appointmentList.isEmpty()) {
-            System.out.println("Schedule calendar is empty.");
+            ta_outputDisplay.appendText("Schedule calendar is empty.\n");
         } else {
             Sort.sortByCounty(this.appointmentList);
-            System.out.println("\n** List of appointments, ordered by county/date/time.\n");
+            ta_outputDisplay.appendText("\n** List of appointments, ordered by county/date/time.\n");
             Iterator var1 = this.appointmentList.iterator();
 
             while(var1.hasNext()) {
                 Appointment appointment = (Appointment)var1.next();
-                System.out.println(appointment.toString());
+                listOfAppointmentsByCounty.add(appointment); //adds now sorted list to observable list
+                ta_outputDisplay.appendText(appointment.toString() + "\n");
+                ta_outputDisplay.appendText(listOfAppointmentsByCounty.toString());
+
             }
 
         }
@@ -1100,7 +1113,7 @@ public class ClinicManagerController {
     @FXML
     public void displayBillingStatements(ActionEvent actionEvent) {
         if (this.appointmentList.isEmpty()) {
-            System.out.println("Schedule calendar is empty.");
+            ta_outputDisplay.appendText("Schedule calendar is empty.\n");
         } else {
             List<Person> uniquePatients = new List();
             double[] patientBills = new double[this.appointmentList.size()];
@@ -1143,15 +1156,15 @@ public class ClinicManagerController {
             }
 
             Sort.patient(uniquePatients);
-            System.out.println("\n** Billing statement ordered by patient. **");
+            ta_outputDisplay.appendText("\n** Billing statement ordered by patient. **\n");
 
             for(i = 0; i < uniquePatients.size(); ++i) {
                 Person patient = (Person)uniquePatients.get(i);
                 double totalDue = patientBills[i];
-                System.out.printf("(%d) %s [due: $%.2f]\n", i + 1, patient.getProfile().toString(), totalDue);
+                ta_outputDisplay.appendText(i + 1 + " %s [due:" + totalDue + "]" +  patient.getProfile().toString() + "\n");
             }
 
-            System.out.println("** end of list **\n");
+            ta_outputDisplay.appendText("** end of list **\n");
 
             while(!this.appointmentList.isEmpty()) {
                 this.appointmentList.remove((Appointment)this.appointmentList.get(0));
@@ -1169,40 +1182,45 @@ public class ClinicManagerController {
      * @param actionEvent is the event that triggers this handler*/
     @FXML
     public void displayOfficeAppointments(ActionEvent actionEvent) {
+        ObservableList<Appointment> listOfOfficeAppointments = FXCollections.observableArrayList();
         if (this.appointmentList.isEmpty()) {
-            System.out.println("Schedule calendar is empty.");
+            ta_outputDisplay.appendText("Schedule calendar is empty.\n");
         } else {
             Sort.officeAppointment(this.appointmentList);
-            System.out.println("** List of office appointments ordered by county/date/time.");
+            ta_outputDisplay.appendText("** List of office appointments ordered by county/date/time.\n");
             Iterator var1 = this.appointmentList.iterator();
 
             while(var1.hasNext()) {
                 Appointment officeAppointment = (Appointment)var1.next();
-                PrintStream var10000 = System.out;
                 String var10001 = officeAppointment.getDate().toString();
-                var10000.println(var10001 + " " + officeAppointment.getTimeslot().toString() + " " + officeAppointment.getPatient().getProfile().toString() + " [" + officeAppointment.getProvider().toString() + "]");
+                ta_outputDisplay.appendText(var10001 + " " + officeAppointment.getTimeslot().toString() + " " +
+                        officeAppointment.getPatient().getProfile().toString() + " [" + officeAppointment.getProvider().toString() + "]\n");
+                listOfOfficeAppointments.add(officeAppointment);
+                ta_outputDisplay.appendText(listOfOfficeAppointments.toString());
             }
-
-            System.out.println("** end of list **");
+            ta_outputDisplay.appendText("** end of list **\n");
         }
     }
     /**displays imaging appointments
      * @param actionEvent is the event that triggers this handler*/
     @FXML
     public void displayImagingAppointments(ActionEvent actionEvent) {
+        ObservableList<Appointment> listOfImagingAppointments = FXCollections.observableArrayList();
+
         if (this.imagingList.isEmpty()) {
-            System.out.println("Schedule calendar is empty.");
+            ta_outputDisplay.appendText("Schedule calendar is empty.\n");
         } else {
             Sort.imagingAppointment(this.imagingList);
-            System.out.println("\n** List of radiology appointments ordered by county/date/time");
+            ta_outputDisplay.appendText("\n** List of radiology appointments ordered by county/date/time\n");
             Iterator var1 = this.imagingList.iterator();
 
             while(var1.hasNext()) {
                 Imaging imagingAppointments = (Imaging)var1.next();
-                System.out.println(imagingAppointments.toString());
+                listOfImagingAppointments.add(imagingAppointments);
+                ta_outputDisplay.appendText(imagingAppointments.toString());
+                ta_outputDisplay.appendText(listOfImagingAppointments.toString());
             }
-
-            System.out.println("**end of list**\n");
+            ta_outputDisplay.appendText("**end of list**\n");
         }
     }
 
@@ -1211,7 +1229,7 @@ public class ClinicManagerController {
     @FXML
     public void displayExpectedCredit(ActionEvent actionEvent) {
         if (this.appointmentList.isEmpty()) {
-            System.out.println("Schedule calendar is empty.");
+            ta_outputDisplay.appendText("Schedule calendar is empty.\n");
         } else {
             List<Provider> uniqueProviders = new List();
             Iterator var2 = this.appointmentList.iterator();
@@ -1237,7 +1255,7 @@ public class ClinicManagerController {
             }
 
             Sort.provider(uniqueProviders);
-            System.out.println("\n** Credit amount ordered by provider. **"); //use ta_output
+            ta_outputDisplay.appendText("\n** Credit amount ordered by provider. **\n"); //use ta_output
 
             for(int i = 0; i < uniqueProviders.size(); ++i) {
                 Provider provider = (Provider)uniqueProviders.get(i);
@@ -1251,10 +1269,10 @@ public class ClinicManagerController {
                     }
                 }
 
-                System.out.printf("(%d) %s [credit amount: $%.2f]\n", i + 1, provider.getProfile().toString(), totalCredit);
+                ta_outputDisplay.appendText( i + 1 + " %s [credit amount:" + totalCredit + "]" + provider.getProfile().toString() + "\n");
             }
 
-            System.out.println("** end of list **\n");
+            ta_outputDisplay.appendText("** end of list **\n");
         }
     }
 
