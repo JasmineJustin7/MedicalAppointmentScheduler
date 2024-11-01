@@ -451,6 +451,7 @@ public class ClinicManagerController {
             Person patient = new Person(patientProfile);
             appointment = new Imaging(appointmentDate, selectedTimeslot, patient, availableTech, imagingSrv);
             this.imagingList.add(appointment);
+            this.appointmentList.add(appointment);
             ta_outputDisplay.appendText(appointment.getDate().toString() + " " + appointment.getTimeslot().toString() + " " + appointment.getPatient() + " [" +
                     appointment.getProvider().getProfile() + ", " + appointment.getProvider().getLocation() + " [" + appointment.getRoom().toString() + "]]" + " booked.\n");
         } catch (Exception var16) {
@@ -1115,7 +1116,7 @@ public class ClinicManagerController {
     /**displays billing statements
      * @param actionEvent is the event that triggers this handler*/
     @FXML
-    public void displayBillingStatements(ActionEvent actionEvent) {
+    public void handleBillings(ActionEvent actionEvent) {
         if (this.appointmentList.isEmpty()) {
             ta_outputDisplay.appendText("Schedule calendar is empty.\n");
         } else {
@@ -1236,7 +1237,7 @@ public class ClinicManagerController {
     /**displays credit
      * @param actionEvent is the event that triggers this handler*/
     @FXML
-    public void displayExpectedCredit(ActionEvent actionEvent) {
+    public void handleCreditAmount(ActionEvent actionEvent) {
         if (this.appointmentList.isEmpty()) {
             ta_outputDisplay.appendText("Schedule calendar is empty.\n");
         } else {
