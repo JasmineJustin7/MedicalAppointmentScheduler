@@ -163,6 +163,7 @@
                                                     <MenuItem id="Date/time/provider" fx:id="mi_sortByDateSS" mnemonicParsing="false" onAction="#displayAppointmentsSortedByDate" text="Date/time/provider" />
                                                     <MenuItem id="Office Visits Only" fx:id="mi_visitsSS" mnemonicParsing="false" onAction="#displayOfficeAppointments" text="Office Visits Only" />
                                                     <MenuItem id="Imaging Service Only" fx:id="mi_imagingSS" mnemonicParsing="false" onAction="#displayImagingAppointments" text="Imaging Services Only" />
+                                          <MenuItem fx:id="mi_sortByPatientSS" mnemonicParsing="false" onAction="#displayAppointmentsSortedByPatient" text="Patient/Date/Time" />
                                                 </items>
                                             </Menu>
                                             <Menu id="Select Statement" mnemonicParsing="false" text="Statement Type">
@@ -173,7 +174,7 @@
                                             </Menu>
                                         </menus>
                                     </MenuBar>
-                                    <Button fx:id="bt_clearSS" mnemonicParsing="false" text="Clear" translateX="202.0" translateY="-0.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                    <Button fx:id="bt_clearSS" mnemonicParsing="false" onAction="#clearTextArea" text="Clear" translateX="202.0" translateY="-0.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                 </children>
                             </GridPane>
                         </children>

@@ -248,6 +248,10 @@ public class ClinicManagerController {
     @FXML
     private MenuItem mi_visitsSS;
 
+    /**menu item for sorting by patient*/
+    @FXML
+    private MenuItem mi_sortByPatientSS;
+
 
     /**
      * default constructor of clinic manager controller
@@ -1279,6 +1283,13 @@ public class ClinicManagerController {
 
             ta_outputDisplay.appendText("** end of list **\n");
         }
+    }
+
+    /**clear text area in service summary tab
+     * @param actionEvent triggers this handler*/
+    @FXML
+    public void clearTextArea(ActionEvent actionEvent){
+        ta_outputDisplay.clear();
     }
 
 
