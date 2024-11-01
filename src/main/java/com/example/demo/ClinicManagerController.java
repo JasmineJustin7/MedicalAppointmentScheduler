@@ -1181,7 +1181,7 @@ public class ClinicManagerController {
                     }
                 }
                 DecimalFormat df = new DecimalFormat("#.00");
-                ta_outputDisplay.appendText("(" + (i + 1) + ") " + "[Credit amount: " + df.format(totalCredit) + "] " + provider.getProfile().toString() + "\n");
+                ta_outputDisplay.appendText("(" + (i + 1) + ") " + provider.getProfile().toString() + " [Credit amount: $" + df.format(totalCredit) + "] " + "\n");
             }
             ta_outputDisplay.appendText("** end of list **\n");
         }
@@ -1233,7 +1233,7 @@ public class ClinicManagerController {
             Person patient = uniquePatients.get(i);
             double totalDue = patientBills[i];
             DecimalFormat df = new DecimalFormat("#.00");
-            ta_outputDisplay.appendText("(" + (i + 1) + ")" + " [Due: " + df.format(totalDue) + "] " + patient.getProfile().toString() + "\n");
+            ta_outputDisplay.appendText("(" + (i + 1) + ")" + patient.getProfile().toString() + " [Due: $" + df.format(totalDue) + "] " + "\n");
         }
         ta_outputDisplay.appendText("** end of list **\n");
     }
