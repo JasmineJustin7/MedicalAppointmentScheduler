@@ -168,8 +168,8 @@
                                             </Menu>
                                             <Menu id="Select Statement" mnemonicParsing="false" text="Statement Type">
                                                 <items>
-                                                    <MenuItem id="Patient(Billing)" fx:id="mi_patientSS" mnemonicParsing="false" text="Patient(Billing)" />
-                                                    <MenuItem id="Provider(Credit Amount)" fx:id="mi_providerSS" mnemonicParsing="false" text="Provider(Credit Amount)" />
+                                                    <MenuItem id="Patient(Billing)" fx:id="mi_patientSS" mnemonicParsing="false" onAction="#handleBilling" text="Patient(Billing)" />
+                                                    <MenuItem id="Provider(Credit Amount)" fx:id="mi_providerSS" mnemonicParsing="false" onAction="#handleCreditAmount" text="Provider(Credit Amount)" />
                                                 </items>
                                             </Menu>
                                         </menus>

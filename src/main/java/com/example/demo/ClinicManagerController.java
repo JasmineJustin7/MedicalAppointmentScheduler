@@ -1089,76 +1089,6 @@ public class ClinicManagerController {
         }
     }
 
-    /**displays billing statements
-     * @param actionEvent is the event that triggers this handler*/
-    @FXML
-    public void handleBillings(ActionEvent actionEvent) {
-        if (this.appointmentList.isEmpty()) {
-            ta_outputDisplay.appendText("Schedule calendar is empty.\n");
-        } else {
-            List<Person> uniquePatients = new List();
-            double[] patientBills = new double[this.appointmentList.size()];
-
-            int i;
-            for(i = 0; i < this.appointmentList.size(); ++i) {
-                Appointment appointment = (Appointment)this.appointmentList.get(i);
-                Person patient = appointment.getPatient();
-                Provider provider = appointment.getProvider();
-                double charge = 0.0;
-                if (provider instanceof Doctor) {
-                    Doctor doctor = (Doctor)provider;
-                    double var10000;
-                    switch (doctor.getSpecialty()) {
-                        case FAMILY -> var10000 = 250.0;
-                        case PEDIATRICIAN -> var10000 = 300.0;
-                        case ALLERGIST -> var10000 = 350.0;
-                        default -> var10000 = 0.0;
-                    }
-
-                    charge = var10000;
-                } else if (provider instanceof Technician) {
-                    charge = (double)provider.rate();
-                }
-
-                boolean patientExists = false;
-
-                for(int j = 0; j < uniquePatients.size(); ++j) {
-                    if (((Person)uniquePatients.get(j)).equals(patient)) {
-                        patientBills[j] += charge;
-                        patientExists = true;
-                        break;
-                    }
-                }
-
-                if (!patientExists) {
-                    uniquePatients.add(patient);
-                    patientBills[uniquePatients.size() - 1] = charge;
-                }
-            }
-
-            Sort.patient(uniquePatients);
-            ta_outputDisplay.appendText("\n** Billing statement ordered by patient. **\n");
-
-            for(i = 0; i < uniquePatients.size(); ++i) {
-                Person patient = (Person)uniquePatients.get(i);
-                double totalDue = patientBills[i];
-                ta_outputDisplay.appendText(i + 1 + " %s [due:" + totalDue + "]" +  patient.getProfile().toString() + "\n");
-            }
-
-            ta_outputDisplay.appendText("** end of list **\n");
-
-            while(!this.appointmentList.isEmpty()) {
-                this.appointmentList.remove((Appointment)this.appointmentList.get(0));
-            }
-
-            while(!this.imagingList.isEmpty()) {
-                this.imagingList.remove((Imaging)this.imagingList.get(0));
-            }
-
-        }
-    }
-
-
     /**displays office appointments
      * @param actionEvent is the event that triggers this handler*/
     @FXML
@@ -1210,57 +1140,96 @@ public class ClinicManagerController {
         }
     }
 
-    /**displays credit
-     * @param actionEvent is the event that triggers this handler*/
+
+    /**
+     * displays credit amount for providers
+     * @param event is the event that triggers this handler
+     */
     @FXML
-    public void handleCreditAmount(ActionEvent actionEvent) {
+    void handleCreditAmount(ActionEvent event) {
+        ObservableList<Appointment> creditAmount = FXCollections.observableArrayList();
         if (this.appointmentList.isEmpty()) {
             ta_outputDisplay.appendText("Schedule calendar is empty.\n");
         } else {
-            List<Provider> uniqueProviders = new List();
-            Iterator var2 = this.appointmentList.iterator();
+            List<Provider> uniqueProviders = new List<>();
 
-            Iterator var6;
-            while(var2.hasNext()) {
-                Appointment appointment = (Appointment)var2.next();
+
+            for (Appointment appointment : this.appointmentList) {
                 Provider provider = appointment.getProvider();
-                boolean providerExists = false;
-                var6 = uniqueProviders.iterator();
-
-                while(var6.hasNext()) {
-                    Provider existingProvider = (Provider)var6.next();
-                    if (existingProvider.equals(provider)) {
-                        providerExists = true;
-                        break;
-                    }
-                }
-
-                if (!providerExists) {
+                if (!uniqueProviders.contains(provider)) {
                     uniqueProviders.add(provider);
                 }
             }
 
+
             Sort.provider(uniqueProviders);
-            ta_outputDisplay.appendText("\n** Credit amount ordered by provider. **\n"); //use ta_output
+            ta_outputDisplay.appendText("\n** Credit amount ordered by provider. **\n");
 
-            for(int i = 0; i < uniqueProviders.size(); ++i) {
-                Provider provider = (Provider)uniqueProviders.get(i);
+
+            for (int i = 0; i < uniqueProviders.size(); i++) {
+                Provider provider = uniqueProviders.get(i);
                 double totalCredit = 0.0;
-                var6 = this.appointmentList.iterator();
-
-                while(var6.hasNext()) {
-                    Appointment appointment = (Appointment)var6.next();
+                for (Appointment appointment : this.appointmentList) {
                     if (appointment.getProvider().equals(provider)) {
-                        totalCredit += (double)provider.rate();
+                        totalCredit += provider.rate();
                     }
                 }
-
-                ta_outputDisplay.appendText( i + 1 + " %s [credit amount:" + totalCredit + "]" + provider.getProfile().toString() + "\n");
+                ta_outputDisplay.appendText("(" + i + 1 + ")" + "[credit amount: " + totalCredit + "] " + provider.getProfile().toString());
             }
-
             ta_outputDisplay.appendText("** end of list **\n");
         }
     }
+
+
+    /**
+     * Displays Billing Statement for patient
+     * @param event is the event that triggers this handler
+     */
+    @FXML
+    void handleBilling(ActionEvent event) {
+        ObservableList<Appointment> handleBillingAmount = FXCollections.observableArrayList();
+        if (this.appointmentList.isEmpty()) {
+            ta_outputDisplay.appendText("Schedule calendar is empty.\n");
+            return;
+        }
+        List<Person> uniquePatients = new List<>();
+        double[] patientBills = new double[this.appointmentList.size()];
+        for (Appointment appointment : this.appointmentList) {
+            Person patient = appointment.getPatient();
+            Provider provider = appointment.getProvider();
+            double charge = 0.0;
+
+            if (provider instanceof Doctor) {
+                Doctor doctor = (Doctor) provider;
+                switch (doctor.getSpecialty()) {
+                    case FAMILY -> charge = 250.0;
+                    case PEDIATRICIAN -> charge = 300.0;
+                    case ALLERGIST -> charge = 350.0;
+                }
+            } else if (provider instanceof Technician) {
+                charge = provider.rate();
+            }
+
+
+            int patientIndex = uniquePatients.indexOf(patient);
+            if (patientIndex != -1) {
+                patientBills[patientIndex] += charge;
+            } else {
+                uniquePatients.add(patient);
+                patientBills[uniquePatients.size() - 1] = charge;
+            }
+        }
+
+        Sort.patient(uniquePatients);
+        ta_outputDisplay.appendText("\n** Billing statement ordered by patient. **\n");
+        for (int i = 0; i < uniquePatients.size(); i++) {
+            Person patient = uniquePatients.get(i);
+            double totalDue = patientBills[i];
+            ta_outputDisplay.appendText("(" + i + 1 + ")" + " [due: " + totalDue + "] " + patient.getProfile().toString() + "\n");
+        }
+        ta_outputDisplay.appendText("** end of list **\n");
+    }
+
 
     /**clear text area in service summary tab
      * @param actionEvent triggers this handler*/
