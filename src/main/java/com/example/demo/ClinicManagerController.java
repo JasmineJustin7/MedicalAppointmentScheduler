@@ -749,33 +749,9 @@ public class ClinicManagerController {
             }
             existingAppointment = (Appointment) var3.next();
         } while (!existingAppointment.getProvider().equals(provider) || !existingAppointment.getTimeslot().equals(timeslot));
+
+        ta_outputDisplay.appendText(provider.toString() + " is not available at " + String.valueOf(timeslot));
         return false;
-    }
-
-    /**
-     * applies string representation of timeslot to a timeslot
-     * @param timeSlot is the timeslot gained from user input
-     * @return timeslot representation
-     */
-    private Timeslot getTimeslotFromString(String timeSlot) {
-        Timeslot var10000;
-        switch (timeSlot) {
-            case "1" -> var10000 = Timeslot.slot1();
-            case "2" -> var10000 = Timeslot.slot2();
-            case "3" -> var10000 = Timeslot.slot3();
-            case "4" -> var10000 = Timeslot.slot4();
-            case "5" -> var10000 = Timeslot.slot5();
-            case "6" -> var10000 = Timeslot.slot6();
-            case "7" -> var10000 = Timeslot.slot7();
-            case "8" -> var10000 = Timeslot.slot8();
-            case "9" -> var10000 = Timeslot.slot9();
-            case "10" -> var10000 = Timeslot.slot10();
-            case "11" -> var10000 = Timeslot.slot11();
-            case "12" -> var10000 = Timeslot.slot12();
-            default -> var10000 = null;
-        }
-
-        return var10000;
     }
 
     /**
