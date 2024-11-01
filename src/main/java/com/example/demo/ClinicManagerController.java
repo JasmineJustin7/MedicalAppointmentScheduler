@@ -1051,11 +1051,10 @@ public class ClinicManagerController {
             while(var1.hasNext()) {
                 Appointment appointment = (Appointment)var1.next();
                 listOfAppointmentsByDate.add(appointment);
-                ta_outputDisplay.appendText(appointment.toString() + "\n");
-                ta_outputDisplay.appendText(listOfAppointmentsByDate.toString());
-
             }
-
+            for(Appointment item : listOfAppointmentsByDate){
+                ta_outputDisplay.appendText(item.toString() + "\n");
+            }
             ta_outputDisplay.appendText("**end of list**\n");
         }
     }
@@ -1076,9 +1075,9 @@ public class ClinicManagerController {
             while(var1.hasNext()) {
                 Appointment appointment = (Appointment)var1.next();
                 listOfAppointmentsByPatient.add(appointment);
-                ta_outputDisplay.appendText(appointment.toString() + "\n");
-                ta_outputDisplay.appendText(listOfAppointmentsByPatient.toString());
-
+            }
+            for(Appointment item : listOfAppointmentsByPatient){
+                ta_outputDisplay.appendText(item.toString() + "\n");
             }
 
             ta_outputDisplay.appendText("**end of list**\n");
@@ -1100,9 +1099,10 @@ public class ClinicManagerController {
             while(var1.hasNext()) {
                 Appointment appointment = (Appointment)var1.next();
                 listOfAppointmentsByCounty.add(appointment); //adds now sorted list to observable list
-                ta_outputDisplay.appendText(appointment.toString() + "\n");
-                ta_outputDisplay.appendText(listOfAppointmentsByCounty.toString());
+            }
 
+            for(Appointment item : listOfAppointmentsByCounty){
+                ta_outputDisplay.appendText(item.toString() + "\n");
             }
 
         }
@@ -1193,10 +1193,12 @@ public class ClinicManagerController {
             while(var1.hasNext()) {
                 Appointment officeAppointment = (Appointment)var1.next();
                 String var10001 = officeAppointment.getDate().toString();
-                ta_outputDisplay.appendText(var10001 + " " + officeAppointment.getTimeslot().toString() + " " +
-                        officeAppointment.getPatient().getProfile().toString() + " [" + officeAppointment.getProvider().toString() + "]\n");
                 listOfOfficeAppointments.add(officeAppointment);
-                ta_outputDisplay.appendText(listOfOfficeAppointments.toString());
+            }
+
+            for(Appointment item : listOfOfficeAppointments){
+                ta_outputDisplay.appendText(item.getDate().toString()+ " " + item.getTimeslot().toString() + " " +
+                        item.getPatient().getProfile().toString() + " [" + item.getProvider().toString() + "]\n");
             }
             ta_outputDisplay.appendText("** end of list **\n");
         }
@@ -1217,9 +1219,12 @@ public class ClinicManagerController {
             while(var1.hasNext()) {
                 Imaging imagingAppointments = (Imaging)var1.next();
                 listOfImagingAppointments.add(imagingAppointments);
-                ta_outputDisplay.appendText(imagingAppointments.toString());
-                ta_outputDisplay.appendText(listOfImagingAppointments.toString());
             }
+
+            for(Appointment item : listOfImagingAppointments){
+                ta_outputDisplay.appendText(item.toString() + "\n");
+            }
+
             ta_outputDisplay.appendText("**end of list**\n");
         }
     }
